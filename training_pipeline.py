@@ -23,15 +23,32 @@ import logging
 
 # config = Config()
 
+# Taken from Config defaults
+# python_cmd = "python"
+# preprocess_per = 3.7
+# noparallel = False
+# is_half = False
+# device = 'mps'
+
+python_cmd = os.environ.get("python_cmd")
+preprocess_per = float(os.environ.get("preprocess_per"))
+noparallel = bool(os.environ.get("noparallel"))
+is_half = bool(os.environ.get("is_half"))
+device = os.environ.get("device")
+
+for var in [python_cmd, preprocess_per, noparallel, is_half, device]:
+    print(f'The value is {var}')
+    print(f'The type of var {type(var)}')
+
 logger = logging.getLogger(__name__)
 
 #############################################################################
 
-root = '/Users/tomasandrade/Documents/BSC/ICHOIR/Retrieval-based-Voice-Conversion-WebUI/'
+root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/small_dataset'
-exp_dir1 = 'script-test'
-sr2 = "40k"
-np7 = 6
+exp_dir = 'script-test'
+sr = "40k"
+num_proc = 6
 
 #"Select the pitch extraction algorithm: when extracting singing, 
 # you can use 'pm' to speed up. For high-quality speech with fast 
@@ -39,65 +56,58 @@ np7 = 6
 # results in better quality but is slower.  'rmvpe' has the best 
 # results and consumes less CPU/GPU",
 choices_f0method8=["pm", "harvest", "dio", "rmvpe", "rmvpe_gpu"]
-f0method8 = "pm"
+f0method = "pm"
 
-# "Enter the GPU index(es) separated by '-', e.g., 
-# 0-1-2 to use GPU 0, 1, and 2:"
-gpus6 = '' 
+# # "Enter the GPU index(es) separated by '-', e.g., 
+# # 0-1-2 to use GPU 0, 1, and 2:"
+# gpus6 = '' 
 
 # "Whether the model has pitch guidance 
 # (required for singing, optional for speech):"
-if_f0_3 = True
+if_f0 = True
 
 # "Version"
-choices_version19 =["v1", "v2"]
-version19 = "v2"
+choices_version =["v1", "v2"]
+version = "v2"
 
 # "Enter the GPU index(es) separated by '-', e.g., 
 # 0-0-1 to use 2 processes in GPU0 and 1 process in GPU1",
 gpus_rmvpe = '-' # for no gpus
 
 # speaker id???
-spk_id5 = 0
+spk_id = 0
 
 # Save frequency (5)
-save_epoch10 = 5
+save_epoch = 5
 
 #Total training epochs (20)
-total_epoch11 = 2 #20
+total_epoch = 2 #20
 
 # Batch size per GPU (1)
-batch_size12 = 1
+batch_size = 1
 
 # Save only the latest '.ckpt' file to save disk space: (No)
-if_save_latest13 = 'No'
+if_save_latest = 'No'
 
 # Cache all training sets to GPU memory. Caching small datasets 
 # (less than 10 minutes) can speed up training, but caching large datasets 
 # will consume a lot of GPU memory and may not provide much speed improvement: (No)
-if_cache_gpu17 = 'No'
+if_cache_gpu = 'No'
 
 # Save a small final model to the 'weights' folder at each save point: (No)
-if_save_every_weights18 = 'No'
+if_save_every_weights = 'No'
 
 # Load pre-trained base model G path: (assets/pretrained_v2/f0G40k.pth)
-pretrained_G14 = 'assets/pretrained_v2/f0G40k.pth'
+pretrained_G = 'assets/pretrained_v2/f0G40k.pth'
 
 # Load pre-trained base model D path: (assets/pretrained_v2/f0D40k.pth)
-pretrained_D15 = 'assets/pretrained_v2/f0D40k.pth'
+pretrained_D = 'assets/pretrained_v2/f0D40k.pth'
 
 # Enter the GPU index(es) separated by '-', e.g., 0-1-2 to use GPU 0, 1, 
 # and 2: (None but -??)
-gpus16 = '-'
+gpus = '-'
 
 #############################################################################
-
-# Taken from Config defaults
-python_cmd = "python"
-preprocess_per = 3.7
-noparallel = False
-is_half = False
-device = 'mps'
 
 sr_dict = {
     "32k": 32000,
@@ -176,7 +186,7 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     # logger.info(log)
     # yield log
 
-def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version19, gpus_rmvpe):
+def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe):
     gpus = gpus.split("-")
 
     print(f'------------------ now dir {now_dir}') 
@@ -223,7 +233,7 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version19, gpus_rmvp
                 n_g,
                 now_dir,
                 exp_dir,
-                version19,
+                version,
                 is_half
             )
         )
@@ -349,7 +359,7 @@ def click_train(
                 python_cmd, 
                 exp_dir1,
                 sr2,
-                1 if if_f0_3 else 0,
+                1 if if_f0 else 0,
                 batch_size12,
                 gpus16,
                 total_epoch11,
@@ -369,7 +379,7 @@ def click_train(
                 python_cmd,
                 exp_dir1,
                 sr2,
-                1 if if_f0_3 else 0,
+                1 if if_f0 else 0,
                 batch_size12,
                 total_epoch11,
                 save_epoch,
@@ -495,7 +505,7 @@ def train_index(exp_dir1, version19):
     # infos.append("成功构建索引，added_IVF%s_Flat_FastScan_%s.index"%(n_ivf,version19))
     #yield "\n".join(infos)
 
-preprocess_dataset(trainset_dir, exp_dir1, sr2, np7)
+preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
 
 # Need to give enough time for some folders to be created. This seems
 # very buggy! maybe create the folders from the beginning, instead of
@@ -503,35 +513,35 @@ preprocess_dataset(trainset_dir, exp_dir1, sr2, np7)
 print('Im only sleeping')
 sleep(5)
 
-extract_f0_feature(gpus6,
-                    np7,
-                    f0method8,
-                    if_f0_3,
-                    exp_dir1,
-                    version19,
+extract_f0_feature(gpus,
+                    num_proc,
+                    f0method,
+                    if_f0,
+                    exp_dir,
+                    version,
                     gpus_rmvpe)
 
 print('Im only sleeping')
 sleep(5)
 
 click_train(
-    exp_dir1,
-    sr2,
-    if_f0_3,
-    spk_id5,
-    save_epoch10,
-    total_epoch11,
-    batch_size12,
-    if_save_latest13,
-    pretrained_G14,
-    pretrained_D15,
-    gpus16,
-    if_cache_gpu17,
-    if_save_every_weights18,
-    version19,
+    exp_dir,
+    sr,
+    if_f0,
+    spk_id,
+    save_epoch,
+    total_epoch,
+    batch_size,
+    if_save_latest,
+    pretrained_G,
+    pretrained_D,
+    gpus,
+    if_cache_gpu,
+    if_save_every_weights,
+    version,
 )
 
 # print('Im only sleeping')
 # sleep(5)
 
-train_index(exp_dir1, version19)
+train_index(exp_dir, version)
