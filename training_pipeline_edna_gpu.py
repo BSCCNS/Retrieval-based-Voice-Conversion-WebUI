@@ -97,10 +97,10 @@ gpus_rmvpe = '0-0' # for no gpus
 spk_id = 0
 
 # Save frequency (5)
-save_epoch = 5
+save_epoch = 20
 
 #Total training epochs (20)
-total_epoch = 2 #20
+total_epoch = 100
 
 # Batch size per GPU (1)
 batch_size = 1
