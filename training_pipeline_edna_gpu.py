@@ -66,7 +66,7 @@ logger = logging.getLogger(__name__)
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/small_dataset'
 exp_dir = 'script-test'
-sr = "40000"
+sr = "40k"
 num_proc = 54
 
 #"Select the pitch extraction algorithm: when extracting singing, 
