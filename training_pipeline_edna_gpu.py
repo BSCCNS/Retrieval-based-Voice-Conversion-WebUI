@@ -29,6 +29,7 @@ preprocess_per = float(os.environ.get("preprocess_per"))
 noparallel = bool(os.environ.get("noparallel"))
 is_half = bool(os.environ.get("is_half"))
 device = os.environ.get("device")
+n_cpu = int(os.environ.get("n_cpu"))
 
 for var in [python_cmd, preprocess_per, noparallel, is_half, device]:
     print(f'The value is {var}')
@@ -38,12 +39,35 @@ logger = logging.getLogger(__name__)
 
 #############################################################################
 
+# TA MESSAGE from preprocess_dataset --------
+# TA MESSAGE config.python_cmd = /home/tomas/.pyenv/versions/rvc/bin/python
+# TA MESSAGE config.noparallel = False
+# TA MESSAGE config.noparallel = 3.7
+# TA MESSAGE sr = 40000
+# TA MESSAGE n_p = 54
+# TA MESSAGE gpus pre split = 0
+# TA MESSAGE from extract_f0_feature --------
+# TA MESSAGE config.python_cmd = /home/tomas/.pyenv/versions/rvc/bin/python
+# TA MESSAGE config.device = cuda:0
+# TA MESSAGE config.is_half = True
+# TA MESSAGE n_p = 54
+# TA MESSAGE gpus post split = ['0']
+# TA MESSAGE if_f0 = True
+# TA MESSAGE version19 = v2
+# TA MESSAGE gpus_rmvpe = 0-0
+# TA MESSAGE from click_train --------
+# TA MESSAGE pretrained_G14 = assets/pretrained_v2/f0G40k.pth
+# TA MESSAGE pretrained_D15 = assets/pretrained_v2/f0D40k.pth
+# TA MESSAGE gpus16 = 0
+# TA MESSAGE train_index ------------
+# TA MESSAGE config.n_cpu = 80
+
 #root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
-root = '/media/HDD_disk/tomas/ICHOIR/Retrieval-based-Voice-Conversion-WebUI/fork/Retrieval-based-Voice-Conversion-WebUI'
+root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/small_dataset'
 exp_dir = 'script-test'
-sr = "40k"
-num_proc = 6
+sr = "40000"
+num_proc = 54
 
 #"Select the pitch extraction algorithm: when extracting singing, 
 # you can use 'pm' to speed up. For high-quality speech with fast 
@@ -67,7 +91,7 @@ version = "v2"
 
 # "Enter the GPU index(es) separated by '-', e.g., 
 # 0-0-1 to use 2 processes in GPU0 and 1 process in GPU1",
-gpus_rmvpe = '-' # for no gpus
+gpus_rmvpe = '0-0' # for no gpus
 
 # speaker id???
 spk_id = 0
@@ -100,7 +124,7 @@ pretrained_D = 'assets/pretrained_v2/f0D40k.pth'
 
 # Enter the GPU index(es) separated by '-', e.g., 0-1-2 to use GPU 0, 1, 
 # and 2: (None but -??)
-gpus = '-'
+gpus = '0'
 
 #############################################################################
 
@@ -396,7 +420,7 @@ def train_index(exp_dir1, version19):
 
     print('------------------ Inside train_index')
     outside_index_root = os.getenv("outside_index_root")
-    n_cpu = 8
+    # n_cpu = 8
     print(f'------------------ now dir {now_dir}')
     exp_dir = "logs/%s" % (exp_dir1)
     os.makedirs(exp_dir, exist_ok=True)
