@@ -154,10 +154,16 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     print('making dirs')
     print(f'------------------ now dir {now_dir}')
 
+    real_exp_dir = "%s/logs/%s" % (now_dir, exp_dir)
     gt_wavs_dir = f"{now_dir}/logs/{exp_dir}/0_gt_wavs" 
     wavs16k_dir = f"{now_dir}/logs/{exp_dir}/1_16k_wavs"
 
-    os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)    
+    print(f'Creating dir: {real_exp_dir}')
+    print(f'Creating dir: {gt_wavs_dir}')
+    print(f'Creating dir: {wavs16k_dir}')
+
+    #os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)   
+    os.makedirs(real_exp_dir, exist_ok=True) 
     os.makedirs(gt_wavs_dir, exist_ok=True)
     os.makedirs(wavs16k_dir, exist_ok=True)
 
