@@ -39,29 +39,6 @@ logger = logging.getLogger(__name__)
 
 #############################################################################
 
-# TA MESSAGE from preprocess_dataset --------
-# TA MESSAGE config.python_cmd = /home/tomas/.pyenv/versions/rvc/bin/python
-# TA MESSAGE config.noparallel = False
-# TA MESSAGE config.noparallel = 3.7
-# TA MESSAGE sr = 40000
-# TA MESSAGE n_p = 54
-# TA MESSAGE gpus pre split = 0
-# TA MESSAGE from extract_f0_feature --------
-# TA MESSAGE config.python_cmd = /home/tomas/.pyenv/versions/rvc/bin/python
-# TA MESSAGE config.device = cuda:0
-# TA MESSAGE config.is_half = True
-# TA MESSAGE n_p = 54
-# TA MESSAGE gpus post split = ['0']
-# TA MESSAGE if_f0 = True
-# TA MESSAGE version19 = v2
-# TA MESSAGE gpus_rmvpe = 0-0
-# TA MESSAGE from click_train --------
-# TA MESSAGE pretrained_G14 = assets/pretrained_v2/f0G40k.pth
-# TA MESSAGE pretrained_D15 = assets/pretrained_v2/f0D40k.pth
-# TA MESSAGE gpus16 = 0
-# TA MESSAGE train_index ------------
-# TA MESSAGE config.n_cpu = 80
-
 #root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/1_16k_wavs'
@@ -163,19 +140,27 @@ def if_done(done, p):
 
 #from infer-web.py
 
-def make_dirs(exp_dir):
-    #self.exp_dir = exp_dir
-    gt_wavs_dir = "%s/0_gt_wavs" % exp_dir
-    wavs16k_dir = "%s/1_16k_wavs" % exp_dir
-    os.makedirs(exp_dir, exist_ok=True)
-    os.makedirs(gt_wavs_dir, exist_ok=True)
-    os.makedirs(wavs16k_dir, exist_ok=True)
+# def make_dirs(exp_dir):
+#     #self.exp_dir = exp_dir
+
+#     gt_wavs_dir = "%s/0_gt_wavs" % exp_dir
+#     wavs16k_dir = "%s/1_16k_wavs" % exp_dir
+#     os.makedirs(exp_dir, exist_ok=True)
+#     os.makedirs(gt_wavs_dir, exist_ok=True)
+#     os.makedirs(wavs16k_dir, exist_ok=True)
 
 def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     sr = sr_dict[sr]
     print('making dirs')
     print(f'------------------ now dir {now_dir}')
-    os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)
+
+    gt_wavs_dir = f"{now_dir}/logs/{exp_dir}/0_gt_wavs" 
+    wavs16k_dir = f"{now_dir}/logs/{exp_dir}/1_16k_wavs"
+
+    os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)    
+    os.makedirs(gt_wavs_dir, exist_ok=True)
+    os.makedirs(wavs16k_dir, exist_ok=True)
+
     f = open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "w")
     f.close()
 
