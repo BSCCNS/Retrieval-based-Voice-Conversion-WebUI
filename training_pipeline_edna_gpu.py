@@ -64,8 +64,8 @@ logger = logging.getLogger(__name__)
 
 #root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
-#trainset_dir = f'{root}/data/1_16k_wavs'
-trainset_dir = 'data/small_dataset'
+trainset_dir = f'{root}/data/1_16k_wavs'
+#trainset_dir = 'data/small_dataset'
 exp_dir = 'maria-50'
 sr = "40k"
 num_proc = 54
