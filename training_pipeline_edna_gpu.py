@@ -519,10 +519,6 @@ def train_index(exp_dir1, version19):
     # infos.append("成功构建索引，added_IVF%s_Flat_FastScan_%s.index"%(n_ivf,version19))
     #yield "\n".join(infos)
 
-make_dirs(exp_dir)
-print('Im only sleeping')
-sleep(5)
-
 preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
 
 # Need to give enough time for some folders to be created. This seems
