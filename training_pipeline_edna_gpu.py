@@ -183,6 +183,8 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     logger.info("Execute: " + cmd)
     p = Popen(cmd, shell=True)
 
+    yield #log
+
     # threading stuff 
     # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
     
@@ -525,6 +527,8 @@ def train_index(exp_dir1, version19):
     #yield "\n".join(infos)
 
 preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
+
+next()
 
 # Need to give enough time for some folders to be created. This seems
 # very buggy! maybe create the folders from the beginning, instead of
