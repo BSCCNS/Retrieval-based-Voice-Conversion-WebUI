@@ -65,7 +65,7 @@ logger = logging.getLogger(__name__)
 #root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/1_16k_wavs'
-exp_dir = 'maria-200'
+exp_dir = 'maria-50'
 sr = "40k"
 num_proc = 54
 
@@ -97,10 +97,10 @@ gpus_rmvpe = '0-0' # for no gpus
 spk_id = 0
 
 # Save frequency (5)
-save_epoch = 40
+save_epoch = 25
 
 #Total training epochs (20)
-total_epoch = 200
+total_epoch = 50
 
 # Batch size per GPU (1)
 batch_size = 40
