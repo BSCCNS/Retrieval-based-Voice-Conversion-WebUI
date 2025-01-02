@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/1_16k_wavs'
 #trainset_dir = 'data/small_dataset'
-exp_dir = 'maria-50'
+exp_dir = 'maria-100'
 sr = "40k"
 num_proc = 54
 
@@ -78,10 +78,10 @@ spk_id = 0
 save_epoch = 25
 
 #Total training epochs (20)
-total_epoch = 50
+total_epoch = 100
 
 # Batch size per GPU (1)
-batch_size = 40
+batch_size = 20
 
 # Save only the latest '.ckpt' file to save disk space: (No)
 if_save_latest = 'No'
