@@ -264,6 +264,7 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe)
             cmd, shell=True, cwd=now_dir
         )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
         ps.append(p)
+        p.communicate()
 
 def click_train(
     exp_dir1,
