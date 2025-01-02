@@ -64,7 +64,8 @@ logger = logging.getLogger(__name__)
 
 #root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
-trainset_dir = f'{root}/data/1_16k_wavs'
+#trainset_dir = f'{root}/data/1_16k_wavs'
+trainset_dir = 'data/small_dataset'
 exp_dir = 'maria-50'
 sr = "40k"
 num_proc = 54
@@ -532,7 +533,7 @@ preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
 # very buggy! maybe create the folders from the beginning, instead of
 # doing it in infer/modules/train/preprocess.py
 print('Im only sleeping')
-sleep(5)
+sleep(15)
 
 extract_f0_feature(gpus,
                     num_proc,
