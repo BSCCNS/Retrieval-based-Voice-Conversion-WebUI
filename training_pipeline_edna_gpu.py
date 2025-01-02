@@ -184,29 +184,27 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     logger.info("Execute: " + cmd)
     p = Popen(cmd, shell=True)
 
-    #yield #log
-
     # threading stuff 
     # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
     
-    # done = [False]
-    # threading.Thread(
-    #     target=if_done,
-    #     args=(
-    #         done,
-    #         p,
-    #     ),
-    # ).start()
-    # while 1:
-    #     with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
-    #         yield (f.read())
-    #     sleep(1)
-    #     if done[0]:
-    #         break
-    # with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
-    #     log = f.read()
-    # logger.info(log)
-    # yield log
+    done = [False]
+    threading.Thread(
+        target=if_done,
+        args=(
+            done,
+            p,
+        ),
+    ).start()
+    while 1:
+        with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
+            yield (f.read())
+        sleep(1)
+        if done[0]:
+            break
+    with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
+        log = f.read()
+    logger.info(log)
+    yield log
 
 def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe):
     gpus = gpus.split("-")
@@ -533,7 +531,7 @@ preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
 # very buggy! maybe create the folders from the beginning, instead of
 # doing it in infer/modules/train/preprocess.py
 print('Im only sleeping')
-sleep(15)
+sleep(5)
 
 extract_f0_feature(gpus,
                     num_proc,
