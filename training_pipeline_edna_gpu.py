@@ -162,6 +162,15 @@ def if_done(done, p):
     done[0] = True
 
 #from infer-web.py
+
+def make_dirs(exp_dir):
+    #self.exp_dir = exp_dir
+    gt_wavs_dir = "%s/0_gt_wavs" % exp_dir
+    wavs16k_dir = "%s/1_16k_wavs" % exp_dir
+    os.makedirs(exp_dir, exist_ok=True)
+    os.makedirs(gt_wavs_dir, exist_ok=True)
+    os.makedirs(wavs16k_dir, exist_ok=True)
+
 def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     sr = sr_dict[sr]
     print('making dirs')
@@ -524,6 +533,10 @@ def train_index(exp_dir1, version19):
     # faiss.write_index(index, '%s/added_IVF%s_Flat_FastScan_%s.index'%(exp_dir,n_ivf,version19))
     # infos.append("成功构建索引，added_IVF%s_Flat_FastScan_%s.index"%(n_ivf,version19))
     #yield "\n".join(infos)
+
+make_dirs(exp_dir)
+print('Im only sleeping')
+sleep(5)
 
 preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
 
