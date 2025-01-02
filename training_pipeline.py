@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 
 root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 trainset_dir = f'{root}/data/small_dataset'
-exp_dir = 'script-test'
+exp_dir = 'maria-50'
 sr = "40k"
 num_proc = 6
 
@@ -81,7 +81,7 @@ spk_id = 0
 save_epoch = 5
 
 #Total training epochs (20)
-total_epoch = 2 #20
+total_epoch = 50 #20
 
 # Batch size per GPU (1)
 batch_size = 1
