@@ -31,9 +31,9 @@ is_half = bool(os.environ.get("is_half"))
 device = os.environ.get("device")
 n_cpu = int(os.environ.get("n_cpu"))
 
-for var in [python_cmd, preprocess_per, noparallel, is_half, device]:
-    print(f'The value is {var}')
-    print(f'The type of var {type(var)}')
+# for var in [python_cmd, preprocess_per, noparallel, is_half, device]:
+#     print(f'The value is {var}')
+#     print(f'The type of var {type(var)}')
 
 logger = logging.getLogger(__name__)
 
@@ -151,6 +151,7 @@ def if_done(done, p):
 
 def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     sr = sr_dict[sr]
+    print('Enter preprocess')
     print('making dirs')
     print(f'------------------ now dir {now_dir}')
 
@@ -187,24 +188,24 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     # threading stuff 
     # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
     
-    done = [False]
-    threading.Thread(
-        target=if_done,
-        args=(
-            done,
-            p,
-        ),
-    ).start()
-    while 1:
-        with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
-            yield (f.read())
-        sleep(1)
-        if done[0]:
-            break
-    with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
-        log = f.read()
-    logger.info(log)
-    yield log
+    # done = [False]
+    # threading.Thread(
+    #     target=if_done,
+    #     args=(
+    #         done,
+    #         p,
+    #     ),
+    # ).start()
+    # while 1:
+    #     with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
+    #         yield (f.read())
+    #     sleep(1)
+    #     if done[0]:
+    #         break
+    # with open("%s/logs/%s/preprocess.log" % (now_dir, exp_dir), "r") as f:
+    #     log = f.read()
+    # logger.info(log)
+    # yield log
 
 def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe):
     gpus = gpus.split("-")
