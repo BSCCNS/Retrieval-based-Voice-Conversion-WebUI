@@ -1,0 +1,21 @@
+
+{
+"exp_dir": "maria-60",
+"trainset_dir": "/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI/data/1_16k_wavs",
+"total_epoch": 60,
+"save_epoch": 20,
+"sr": "40k",
+"num_proc": 54,
+"f0method": "pm",
+"if_f0": true,
+"version": "v2",
+"gpus_rmvpe": "0-0",
+"spk_id": 0,
+"batch_size": 20,
+"if_save_latest": "No",
+"if_cache_gpu": "No",
+"if_save_every_weights": "No",
+"pretrained_G": "assets/pretrained_v2/f0G40k.pth",
+"pretrained_D": "assets/pretrained_v2/f0D40k.pth",
+"gpus": "0"
+}
