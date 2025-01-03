@@ -29,6 +29,8 @@ sr_dict = {
 
 def read_config_vars():
 
+    print('------------------  Reading config variables')
+
     python_cmd = os.environ.get("python_cmd")
     preprocess_per = float(os.environ.get("preprocess_per"))
     noparallel = bool(os.environ.get("noparallel"))
@@ -121,6 +123,7 @@ def extract_f0_feature(params,
                        now_dir = None,
                        logger = None):
     
+    print('------------------ Enter extract_f0_feature') 
     ##############################################################
     gpus = params.get('gpus')
     n_p = params.get('num_proc')
@@ -215,175 +218,12 @@ def if_done(done, p):
             break
     done[0] = True
 
-
-# def click_train(params,
-#     config_vars = None, 
-#     now_dir = None,
-#     logger = None
-# ):
-    
-#     print('------------------ Inside click_train')
-
-#     ##############################################################
-#     exp_dir = params.get('exp_dir')
-#     sr = params.get('sr')
-#     if_f0 = params.get('if_f0')
-#     spk_id = params.get('spk_id')
-#     save_epoch = params.get('save_epoch')
-#     total_epoch = params.get('total_epoch')
-#     batch_size = params.get('batch_size')
-#     if_save_latest = params.get('if_save_latest')
-#     pretrained_G = params.get('pretrained_G')
-#     pretrained_D = params.get('pretrained_D')
-#     gpus = params.get('gpus')
-#     if_cache_gpu = params.get('if_cache_gpu')
-#     if_save_every_weights = params.get('if_save_every_weights')
-#     version = params.get('version')
-#     ##############################################################
-
-
-#     json_config = load_config_json()
-
-#     # 生成filelist
-    
-#     exp_dir = "%s/logs/%s" % (now_dir, exp_dir)
-#     os.makedirs(exp_dir, exist_ok=True)
-
-#     gt_wavs_dir = "%s/0_gt_wavs" % (exp_dir)
-#     feature_dir = (
-#         "%s/3_feature256" % (exp_dir)
-#         if version == "v1"
-#         else "%s/3_feature768" % (exp_dir)
-#     )
-#     if if_f0:
-#         f0_dir = "%s/2a_f0" % (exp_dir)
-#         f0nsf_dir = "%s/2b-f0nsf" % (exp_dir)
-#         names = (
-#             set([name.split(".")[0] for name in os.listdir(gt_wavs_dir)])
-#             & set([name.split(".")[0] for name in os.listdir(feature_dir)])
-#             & set([name.split(".")[0] for name in os.listdir(f0_dir)])
-#             & set([name.split(".")[0] for name in os.listdir(f0nsf_dir)])
-#         )
-#     else:
-#         names = set([name.split(".")[0] for name in os.listdir(gt_wavs_dir)]) & set(
-#             [name.split(".")[0] for name in os.listdir(feature_dir)]
-#         )
-#     opt = []
-#     for name in names:
-#         if if_f0:
-#             opt.append(
-#                 "%s/%s.wav|%s/%s.npy|%s/%s.wav.npy|%s/%s.wav.npy|%s"
-#                 % (
-#                     gt_wavs_dir.replace("\\", "\\\\"),
-#                     name,
-#                     feature_dir.replace("\\", "\\\\"),
-#                     name,
-#                     f0_dir.replace("\\", "\\\\"),
-#                     name,
-#                     f0nsf_dir.replace("\\", "\\\\"),
-#                     name,
-#                     spk_id,
-#                 )
-#             )
-#         else:
-#             opt.append(
-#                 "%s/%s.wav|%s/%s.npy|%s"
-#                 % (
-#                     gt_wavs_dir.replace("\\", "\\\\"),
-#                     name,
-#                     feature_dir.replace("\\", "\\\\"),
-#                     name,
-#                     spk_id,
-#                 )
-#             )
-#     fea_dim = 256 if version == "v1" else 768
-#     if if_f0:
-#         for _ in range(2):
-#             opt.append(
-#                 "%s/logs/mute/0_gt_wavs/mute%s.wav|%s/logs/mute/3_feature%s/mute.npy|%s/logs/mute/2a_f0/mute.wav.npy|%s/logs/mute/2b-f0nsf/mute.wav.npy|%s"
-#                 % (now_dir, sr, now_dir, fea_dim, now_dir, now_dir, spk_id)
-#             )
-#     else:
-#         for _ in range(2):
-#             opt.append(
-#                 "%s/logs/mute/0_gt_wavs/mute%s.wav|%s/logs/mute/3_feature%s/mute.npy|%s"
-#                 % (now_dir, sr, now_dir, fea_dim, spk_id)
-#             )
-#     shuffle(opt)
-#     with open("%s/filelist.txt" % exp_dir, "w") as f:
-#         f.write("\n".join(opt))
-#     logger.debug("Write filelist done")
-    
-#     logger.info("Use gpus: %s", str(gpus))
-#     if pretrained_G == "":
-#         logger.info("No pretrained Generator")
-#     if pretrained_D == "":
-#         logger.info("No pretrained Discriminator")
-#     if version == "v1" or sr == "40k":
-#         config_path = "v1/%s.json" % sr
-#     else:
-#         config_path = "v2/%s.json" % sr
-#     config_save_path = os.path.join(exp_dir, "config.json")
-#     if not pathlib.Path(config_save_path).exists():
-#         with open(config_save_path, "w", encoding="utf-8") as f:
-#             json.dump(
-#                 json_config[config_path],
-#                 f,
-#                 ensure_ascii=False,
-#                 indent=4,
-#                 sort_keys=True,
-#             )
-#             f.write("\n")
-#     if gpus:
-#         cmd = (
-#             '"%s" infer/modules/train/train.py -e "%s" -sr %s -f0 %s -bs %s -g %s -te %s -se %s %s %s -l %s -c %s -sw %s -v %s'
-#             % (
-#                 config_vars['python_cmd'], 
-#                 exp_dir,
-#                 sr,
-#                 1 if if_f0 else 0,
-#                 batch_size,
-#                 gpus,
-#                 total_epoch,
-#                 save_epoch,
-#                 "-pg %s" % pretrained_G if pretrained_G != "" else "",
-#                 "-pd %s" % pretrained_D if pretrained_D != "" else "",
-#                 1 if if_save_latest == 'Yes' else 0,
-#                 1 if if_cache_gpu == 'Yes' else 0,
-#                 1 if if_save_every_weights == 'Yes' else 0,
-#                 version,
-#             )
-#         )
-#     else:
-#         cmd = (
-#             '"%s" infer/modules/train/train.py -e "%s" -sr %s -f0 %s -bs %s -te %s -se %s %s %s -l %s -c %s -sw %s -v %s'
-#             % (
-#                 config_vars['python_cmd'],
-#                 exp_dir,
-#                 sr,
-#                 1 if if_f0 else 0,
-#                 batch_size,
-#                 total_epoch,
-#                 save_epoch,
-#                 "-pg %s" % pretrained_G if pretrained_G != "" else "",
-#                 "-pd %s" % pretrained_D if pretrained_D != "" else "",
-#                 1 if if_save_latest == 'Yes' else 0,
-#                 1 if if_cache_gpu == 'Yes' else 0,
-#                 1 if if_save_every_weights == 'Yes' else 0,
-#                 version,
-#             )
-#         )
-#     logger.info("Execute: " + cmd)
-#     p = Popen(cmd, shell=True, cwd=now_dir)
-#     p.wait()
-#     return "训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"
-
 def click_train(params,
                 config_vars = None, 
                 now_dir = None,
                 logger = None):
     
-    print('--------- Inside click_train')
+    print('------------------ Enter click_train') 
 
     exp_dir1 = params.get('exp_dir')
     sr = params.get('sr')
@@ -535,14 +375,12 @@ def click_train(params,
     p.wait()
     return "训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"
 
-
-
 def train_index(params,
                 config_vars = None, 
                 now_dir = None,
                 logger = None):
 
-    print('------------------ Inside train_index')
+    print('------------------ Enter click_train')
 
     exp_dir1 = params.get('exp_dir')
     version19 = params.get('version')
