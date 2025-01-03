@@ -93,3 +93,67 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p,
     #     log = f.read()
     # logger.info(log)
     # yield log
+
+
+
+def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe,
+                       config_vars = None, 
+                       now_dir = None,
+                       logger = None):
+    
+    gpus = gpus.split("-")
+
+    print(f'------------------ now dir {now_dir}') 
+    os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)
+    f = open("%s/logs/%s/extract_f0_feature.log" % (now_dir, exp_dir), "w")
+    f.close()
+
+    if if_f0:
+        if f0method != "rmvpe_gpu":
+            cmd = (
+                '"%s" infer/modules/train/extract/extract_f0_print.py "%s/logs/%s" %s %s'
+                % (
+                    config_vars['python_cmd'],
+                    now_dir,
+                    exp_dir,
+                    n_p,
+                    f0method,
+                )
+            )
+            logger.info("Execute: " + cmd)
+            p = Popen(
+                cmd, shell=True, cwd=now_dir
+            )  # , stdin=PIPE, stdout=PIPE,stderr=PIPE
+            # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
+            # done = [False]
+            # threading.Thread(
+            #     target=if_done,
+            #     args=(
+            #         done,
+            #         p,
+            #     ),
+            # ).start()
+
+    leng = len(gpus)
+    ps = []
+    for idx, n_g in enumerate(gpus):
+        cmd = (
+            '"%s" infer/modules/train/extract_feature_print.py %s %s %s %s "%s/logs/%s" %s %s'
+            % (
+                config_vars['python_cmd'],
+                config_vars['device'],
+                leng,
+                idx,
+                n_g,
+                now_dir,
+                exp_dir,
+                version,
+                config_vars['is_half']
+            )
+        )
+        logger.info("Execute: " + cmd)
+        p = Popen(
+            cmd, shell=True, cwd=now_dir
+        )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
+        ps.append(p)
+        p.communicate()

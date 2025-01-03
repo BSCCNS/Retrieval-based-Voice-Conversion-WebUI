@@ -173,68 +173,6 @@ def if_done(done, p):
     done[0] = True
 
 
-def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe,
-                       config_vars = None, 
-                       now_dir = None,
-                       logger = None):
-    
-    gpus = gpus.split("-")
-
-    print(f'------------------ now dir {now_dir}') 
-    os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)
-    f = open("%s/logs/%s/extract_f0_feature.log" % (now_dir, exp_dir), "w")
-    f.close()
-
-    if if_f0:
-        if f0method != "rmvpe_gpu":
-            cmd = (
-                '"%s" infer/modules/train/extract/extract_f0_print.py "%s/logs/%s" %s %s'
-                % (
-                    config_vars['python_cmd'],
-                    now_dir,
-                    exp_dir,
-                    n_p,
-                    f0method,
-                )
-            )
-            logger.info("Execute: " + cmd)
-            p = Popen(
-                cmd, shell=True, cwd=now_dir
-            )  # , stdin=PIPE, stdout=PIPE,stderr=PIPE
-            # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
-            # done = [False]
-            # threading.Thread(
-            #     target=if_done,
-            #     args=(
-            #         done,
-            #         p,
-            #     ),
-            # ).start()
-
-    leng = len(gpus)
-    ps = []
-    for idx, n_g in enumerate(gpus):
-        cmd = (
-            '"%s" infer/modules/train/extract_feature_print.py %s %s %s %s "%s/logs/%s" %s %s'
-            % (
-                config_vars['python_cmd'],
-                config_vars['device'],
-                leng,
-                idx,
-                n_g,
-                now_dir,
-                exp_dir,
-                version,
-                config_vars['is_half']
-            )
-        )
-        logger.info("Execute: " + cmd)
-        p = Popen(
-            cmd, shell=True, cwd=now_dir
-        )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
-        ps.append(p)
-        p.communicate()
-
 def click_train(
     exp_dir1,
     sr2,
@@ -250,6 +188,9 @@ def click_train(
     if_cache_gpu17,
     if_save_every_weights18,
     version19,
+    config_vars = None, 
+    now_dir = None,
+    logger = None
 ):
     print('--------- Inside click_train')
 
@@ -348,7 +289,7 @@ def click_train(
         cmd = (
             '"%s" infer/modules/train/train.py -e "%s" -sr %s -f0 %s -bs %s -g %s -te %s -se %s %s %s -l %s -c %s -sw %s -v %s'
             % (
-                python_cmd, 
+                config_vars['python_cmd'], 
                 exp_dir1,
                 sr2,
                 1 if if_f0 else 0,
@@ -368,7 +309,7 @@ def click_train(
         cmd = (
             '"%s" infer/modules/train/train.py -e "%s" -sr %s -f0 %s -bs %s -te %s -se %s %s %s -l %s -c %s -sw %s -v %s'
             % (
-                python_cmd,
+                config_vars['python_cmd'],
                 exp_dir1,
                 sr2,
                 1 if if_f0 else 0,
@@ -506,7 +447,7 @@ pipeline.preprocess_dataset(param_dict['trainset_dir'],
                     logger = logger)
 
 
-extract_f0_feature(param_dict['gpus'],
+pipeline.extract_f0_feature(param_dict['gpus'],
                     param_dict['num_proc'],
                     param_dict['f0method'],
                     param_dict['if_f0'],
@@ -533,5 +474,27 @@ extract_f0_feature(param_dict['gpus'],
 #     if_save_every_weights,
 #     version,
 # )
+
+click_train(
+    param_dict['exp_dir'],
+    param_dict['sr'],
+    param_dict['if_f0'],
+    param_dict['spk_id'],
+    param_dict['save_epoch'],
+    param_dict['total_epoch'],
+    param_dict['batch_size'],
+    param_dict['if_save_latest'],
+    param_dict['pretrained_G'],
+    param_dict['pretrained_D'],
+    param_dict['gpus'],
+    param_dict['if_cache_gpu'],
+    param_dict['if_save_every_weights'],
+    param_dict['version'],
+    config_vars = config_vars, 
+    now_dir = now_dir,
+    logger = logger
+)
+
+    
 
 # train_index(exp_dir, version)
