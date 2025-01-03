@@ -38,7 +38,7 @@ def preprocess_dataset(params,
     trainset_dir = params.get('trainset_dir')
     exp_dir = params.get('exp_dir')
     sr = params.get('sr')
-    n_p = params.get('n_p')
+    n_p = params.get('num_proc')
     ##############################################################
 
     sr = sr_dict[sr]
@@ -107,7 +107,7 @@ def extract_f0_feature(params,
     
     ##############################################################
     gpus = params.get('gpus')
-    n_p = params.get('n_p')
+    n_p = params.get('num_proc')
     f0method = params.get('f0method')
     if_f0 = params.get('if_f0')
     exp_dir = params.get('exp_dir')
