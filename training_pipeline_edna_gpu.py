@@ -146,8 +146,6 @@ logger = logging.getLogger(__name__)
 
 #############################################################################
 
-
-
 version_config_list = [
     "v1/32k.json",
     "v1/40k.json",
@@ -175,7 +173,11 @@ def if_done(done, p):
     done[0] = True
 
 
-def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe):
+def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe,
+                       config_vars = None, 
+                       now_dir = None,
+                       logger = None):
+    
     gpus = gpus.split("-")
 
     print(f'------------------ now dir {now_dir}') 
@@ -188,7 +190,7 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe)
             cmd = (
                 '"%s" infer/modules/train/extract/extract_f0_print.py "%s/logs/%s" %s %s'
                 % (
-                    python_cmd,
+                    config_vars['python_cmd'],
                     now_dir,
                     exp_dir,
                     n_p,
@@ -215,15 +217,15 @@ def extract_f0_feature(gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe)
         cmd = (
             '"%s" infer/modules/train/extract_feature_print.py %s %s %s %s "%s/logs/%s" %s %s'
             % (
-                python_cmd,
-                device,
+                config_vars['python_cmd'],
+                config_vars['device'],
                 leng,
                 idx,
                 n_g,
                 now_dir,
                 exp_dir,
                 version,
-                is_half
+                config_vars['is_half']
             )
         )
         logger.info("Execute: " + cmd)
@@ -504,13 +506,16 @@ pipeline.preprocess_dataset(param_dict['trainset_dir'],
                     logger = logger)
 
 
-# extract_f0_feature(gpus,
-#                     num_proc,
-#                     f0method,
-#                     if_f0,
-#                     exp_dir,
-#                     version,
-#                     gpus_rmvpe)
+extract_f0_feature(param_dict['gpus'],
+                    param_dict['num_proc'],
+                    param_dict['f0method'],
+                    param_dict['if_f0'],
+                    param_dict['exp_dir'],
+                    param_dict['version'],
+                    param_dict['gpus_rmvpe'],
+                    config_vars = config_vars, 
+                    now_dir = now_dir,
+                    logger = logger)
 
 # click_train(
 #     exp_dir,
