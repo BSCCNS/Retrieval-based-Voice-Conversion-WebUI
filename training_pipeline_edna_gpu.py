@@ -148,7 +148,10 @@ logger = logging.getLogger(__name__)
 
 
 
-def train_index(exp_dir1, version19):
+def train_index(exp_dir1, version19, 
+                    config_vars = None, 
+                    now_dir = None,
+                    logger = None):
     # exp_dir = "%s/logs/%s" % (now_dir, exp_dir1)
 
     print('------------------ Inside train_index')
@@ -186,7 +189,7 @@ def train_index(exp_dir1, version19):
                     n_clusters=10000,
                     verbose=True,
                     #batch_size=256 * config.n_cpu,
-                    batch_size=256 * n_cpu,
+                    batch_size=256 * config_vars['n_cpu'],
                     compute_labels=False,
                     init="random",
                 )
