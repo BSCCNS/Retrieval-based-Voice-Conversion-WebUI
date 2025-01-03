@@ -27,6 +27,24 @@ sr_dict = {
     "48k": 48000,
 }
 
+def read_config_vars():
+
+    python_cmd = os.environ.get("python_cmd")
+    preprocess_per = float(os.environ.get("preprocess_per"))
+    noparallel = bool(os.environ.get("noparallel"))
+    is_half = bool(os.environ.get("is_half"))
+    device = os.environ.get("device")
+    n_cpu = int(os.environ.get("n_cpu"))
+
+    config_vars = {'python_cmd': python_cmd, 
+               'preprocess_per': preprocess_per,
+               'noparallel': noparallel,
+               'is_half': is_half,
+               'device': device,
+               'n_cpu': n_cpu}
+    
+    return config_vars
+
 # trainset_dir, exp_dir, sr, n_p
 def preprocess_dataset(params, 
                        config_vars = None, 
@@ -97,8 +115,6 @@ def preprocess_dataset(params,
     #     log = f.read()
     # logger.info(log)
     # yield log
-
-# gpus, n_p, f0method, if_f0, exp_dir, version, gpus_rmvpe
 
 def extract_f0_feature(params,
                        config_vars = None, 
