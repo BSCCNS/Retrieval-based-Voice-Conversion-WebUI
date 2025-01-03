@@ -21,6 +21,15 @@ from subprocess import Popen
 import threading
 import logging
 
+def read_param_dict(parser):
+    args = parser.parse_args()
+    json_file = open(args.parfile)
+    param_dict = json.load(json_file)
+    json_file.close()
+
+    return param_dict
+
+
 sr_dict = {
     "32k": 32000,
     "40k": 40000,
