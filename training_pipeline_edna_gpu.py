@@ -76,6 +76,8 @@ logger = logging.getLogger(__name__)
 
 config_vars = pipeline.read_config_vars()
 
+print(config_vars)
+
 pipeline.preprocess_dataset(param_dict,
                             config_vars = config_vars, 
                             now_dir = now_dir,
