@@ -13,8 +13,8 @@ import infer.modules.train.training_pipeline as pipeline
 train_root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 
 param_dict = {
-    'exp_dir': 'small-data_v1', 
-    'trainset_dir': f'{train_root}/data/small_dataset',
+    'exp_dir': 'maria-60', 
+    'trainset_dir': f'{train_root}/data/1_16k_wavs', 
     'sr' : "40k",
     'num_proc': 54,
     'f0method' : "pm", 
@@ -22,9 +22,9 @@ param_dict = {
     'version' : "v2",
     'gpus_rmvpe' : '0-0',
     'spk_id' : 0,
-    'save_epoch': 2,
-    'total_epoch': 2,
-    'batch_size': 40,
+    'save_epoch': 20,
+    'total_epoch': 60,
+    'batch_size': 20,
     'if_save_latest': 'No',
     'if_cache_gpu': 'No',
     'if_save_every_weights': 'No',
