@@ -24,12 +24,50 @@ import logging
 # config = Config()
 
 # Taken from Config defaults
-python_cmd = os.environ.get("python_cmd")
-preprocess_per = float(os.environ.get("preprocess_per"))
-noparallel = bool(os.environ.get("noparallel"))
-is_half = bool(os.environ.get("is_half"))
-device = os.environ.get("device")
-n_cpu = int(os.environ.get("n_cpu"))
+
+def read_config_vars():
+
+    python_cmd = os.environ.get("python_cmd")
+    preprocess_per = float(os.environ.get("preprocess_per"))
+    noparallel = bool(os.environ.get("noparallel"))
+    is_half = bool(os.environ.get("is_half"))
+    device = os.environ.get("device")
+    n_cpu = int(os.environ.get("n_cpu"))
+
+    config_vars = {'python_cmd': python_cmd, 
+               'preprocess_per': preprocess_per,
+               'noparallel': noparallel,
+               'is_half': is_half,
+               'device': device,
+               'n_cpu': n_cpu}
+    
+    return config_vars
+
+
+config_vars = read_config_vars()
+
+root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
+
+param_dict = {
+    'exp_dir': 'maria-2', 
+    'trainset_dir': f'{root}/data/1_16k_wavs',
+    'sr' : "40k",
+    'num_proc': 54,
+    'f0method' : "pm", # ["pm", "harvest", "dio", "rmvpe", "rmvpe_gpu"]
+    'if_f0' : True,
+    'version' : "v2",
+    'gpus_rmvpe' : '0-0',
+    'spk_id' : 0,
+    'save_epoch': 2,
+    'total_epoch': 2,
+    'batch_size': 40,
+    'if_save_latest': 'No',
+    'if_cache_gpu': 'No',
+    'if_save_every_weights': 'No',
+    'pretrained_G': 'assets/pretrained_v2/f0G40k.pth',
+    'pretrained_D': 'assets/pretrained_v2/f0D40k.pth',
+    'gpus': '0'
+}
 
 # for var in [python_cmd, preprocess_per, noparallel, is_half, device]:
 #     print(f'The value is {var}')
@@ -40,20 +78,20 @@ logger = logging.getLogger(__name__)
 #############################################################################
 
 #root = '/Users/tomasandrade/Documents/BSC/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
-root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
-trainset_dir = f'{root}/data/1_16k_wavs'
-#trainset_dir = 'data/small_dataset'
-exp_dir = 'maria-100'
-sr = "40k"
-num_proc = 54
+# root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
+# trainset_dir = f'{root}/data/1_16k_wavs'
+# #trainset_dir = 'data/small_dataset'
+# exp_dir = 'maria-100'
+# sr = "40k"
+# num_proc = 54
 
 #"Select the pitch extraction algorithm: when extracting singing, 
 # you can use 'pm' to speed up. For high-quality speech with fast 
 # performance, but worse CPU usage, you can use 'dio'. 'harvest' 
 # results in better quality but is slower.  'rmvpe' has the best 
 # results and consumes less CPU/GPU",
-choices_f0method8=["pm", "harvest", "dio", "rmvpe", "rmvpe_gpu"]
-f0method = "pm"
+# choices_f0method8=["pm", "harvest", "dio", "rmvpe", "rmvpe_gpu"]
+# f0method = "pm"
 
 # # "Enter the GPU index(es) separated by '-', e.g., 
 # # 0-1-2 to use GPU 0, 1, and 2:"
@@ -61,48 +99,48 @@ f0method = "pm"
 
 # "Whether the model has pitch guidance 
 # (required for singing, optional for speech):"
-if_f0 = True
+# if_f0 = True
 
 # "Version"
-choices_version =["v1", "v2"]
-version = "v2"
+# choices_version =["v1", "v2"]
+# version = "v2"
 
 # "Enter the GPU index(es) separated by '-', e.g., 
 # 0-0-1 to use 2 processes in GPU0 and 1 process in GPU1",
-gpus_rmvpe = '0-0' # for no gpus
+#gpus_rmvpe = '0-0' # for no gpus
 
 # speaker id???
-spk_id = 0
+#spk_id = 0
 
 # Save frequency (5)
-save_epoch = 25
+#save_epoch = 25
 
 #Total training epochs (20)
-total_epoch = 100
+#total_epoch = 100
 
 # Batch size per GPU (1)
-batch_size = 20
+#batch_size = 20
 
 # Save only the latest '.ckpt' file to save disk space: (No)
-if_save_latest = 'No'
+#if_save_latest = 'No'
 
 # Cache all training sets to GPU memory. Caching small datasets 
 # (less than 10 minutes) can speed up training, but caching large datasets 
 # will consume a lot of GPU memory and may not provide much speed improvement: (No)
-if_cache_gpu = 'No'
+#if_cache_gpu = 'No'
 
 # Save a small final model to the 'weights' folder at each save point: (No)
-if_save_every_weights = 'No'
+#if_save_every_weights = 'No'
 
 # Load pre-trained base model G path: (assets/pretrained_v2/f0G40k.pth)
-pretrained_G = 'assets/pretrained_v2/f0G40k.pth'
+#pretrained_G = 'assets/pretrained_v2/f0G40k.pth'
 
 # Load pre-trained base model D path: (assets/pretrained_v2/f0D40k.pth)
-pretrained_D = 'assets/pretrained_v2/f0D40k.pth'
+#pretrained_D = 'assets/pretrained_v2/f0D40k.pth'
 
 # Enter the GPU index(es) separated by '-', e.g., 0-1-2 to use GPU 0, 1, 
 # and 2: (None but -??)
-gpus = '0'
+#gpus = '0'
 
 #############################################################################
 
@@ -149,19 +187,26 @@ def if_done(done, p):
 #     os.makedirs(gt_wavs_dir, exist_ok=True)
 #     os.makedirs(wavs16k_dir, exist_ok=True)
 
-def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
+def preprocess_dataset(trainset_dir, exp_dir, sr, n_p, 
+                       config_vars = None, 
+                       now_dir = None,
+                       logger = None):
     sr = sr_dict[sr]
-    print('Enter preprocess')
-    print('making dirs')
-    print(f'------------------ now dir {now_dir}')
+    print('------------------  Enter preprocess')
+    
+    print(f'now_dir: {now_dir}')
 
-    real_exp_dir = "%s/logs/%s" % (now_dir, exp_dir)
-    gt_wavs_dir = f"{now_dir}/logs/{exp_dir}/0_gt_wavs" 
-    wavs16k_dir = f"{now_dir}/logs/{exp_dir}/1_16k_wavs"
+    print('Making dirs')
 
-    print(f'Creating dir: {real_exp_dir}')
-    print(f'Creating dir: {gt_wavs_dir}')
-    print(f'Creating dir: {wavs16k_dir}')
+    #real_exp_dir = "%s/logs/%s" % (now_dir, exp_dir)
+
+    real_exp_dir = f"{now_dir}/logs/{exp_dir}"
+    gt_wavs_dir =  f"{now_dir}/logs/{exp_dir}/0_gt_wavs" 
+    wavs16k_dir =  f"{now_dir}/logs/{exp_dir}/1_16k_wavs"
+
+    print(f'Creating real_exp_dir dir: {real_exp_dir}')
+    print(f'Creating gt_wavs_dir dir: {gt_wavs_dir}')
+    print(f'Creating wavs16k_dir dir: {wavs16k_dir}')
 
     #os.makedirs("%s/logs/%s" % (now_dir, exp_dir), exist_ok=True)   
     os.makedirs(real_exp_dir, exist_ok=True) 
@@ -172,14 +217,14 @@ def preprocess_dataset(trainset_dir, exp_dir, sr, n_p):
     f.close()
 
     cmd = '"%s" infer/modules/train/preprocess.py "%s" %s %s "%s/logs/%s" %s %.1f' % (
-        python_cmd,
+        config_vars['python_cmd'],
         trainset_dir,
         sr,
         n_p,
         now_dir,
         exp_dir,
-        noparallel,
-        preprocess_per,
+        config_vars['noparallel'],
+        config_vars['preprocess_per'],
     )
     
     logger.info("Execute: " + cmd)
@@ -528,43 +573,38 @@ def train_index(exp_dir1, version19):
     # infos.append("成功构建索引，added_IVF%s_Flat_FastScan_%s.index"%(n_ivf,version19))
     #yield "\n".join(infos)
 
-preprocess_dataset(trainset_dir, exp_dir, sr, num_proc)
+preprocess_dataset(param_dict['trainset_dir'], 
+                    param_dict['exp_dir'], 
+                    param_dict['sr'], 
+                    param_dict['num_proc'], 
+                    config_vars = config_vars, 
+                    now_dir = now_dir,
+                    logger = logger)
 
-# Need to give enough time for some folders to be created. This seems
-# very buggy! maybe create the folders from the beginning, instead of
-# doing it in infer/modules/train/preprocess.py
-print('Im only sleeping')
-sleep(5)
 
-extract_f0_feature(gpus,
-                    num_proc,
-                    f0method,
-                    if_f0,
-                    exp_dir,
-                    version,
-                    gpus_rmvpe)
+# extract_f0_feature(gpus,
+#                     num_proc,
+#                     f0method,
+#                     if_f0,
+#                     exp_dir,
+#                     version,
+#                     gpus_rmvpe)
 
-print('Im only sleeping')
-sleep(5)
+# click_train(
+#     exp_dir,
+#     sr,
+#     if_f0,
+#     spk_id,
+#     save_epoch,
+#     total_epoch,
+#     batch_size,
+#     if_save_latest,
+#     pretrained_G,
+#     pretrained_D,
+#     gpus,
+#     if_cache_gpu,
+#     if_save_every_weights,
+#     version,
+# )
 
-click_train(
-    exp_dir,
-    sr,
-    if_f0,
-    spk_id,
-    save_epoch,
-    total_epoch,
-    batch_size,
-    if_save_latest,
-    pretrained_G,
-    pretrained_D,
-    gpus,
-    if_cache_gpu,
-    if_save_every_weights,
-    version,
-)
-
-# print('Im only sleeping')
-# sleep(5)
-
-train_index(exp_dir, version)
+# train_index(exp_dir, version)
