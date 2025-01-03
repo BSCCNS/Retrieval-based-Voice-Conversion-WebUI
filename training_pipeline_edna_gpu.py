@@ -44,7 +44,7 @@ config_vars = {'python_cmd': python_cmd,
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 
 param_dict = {
-    'exp_dir': 'maria-40', 
+    'exp_dir': 'maria-60', 
     'trainset_dir': f'{root}/data/1_16k_wavs',
     'sr' : "40k",
     'num_proc': 54,
@@ -53,8 +53,8 @@ param_dict = {
     'version' : "v2",
     'gpus_rmvpe' : '0-0',
     'spk_id' : 0,
-    'save_epoch': 2,
-    'total_epoch': 2,
+    'save_epoch': 30,
+    'total_epoch': 60,
     'batch_size': 40,
     'if_save_latest': 'No',
     'if_cache_gpu': 'No',
