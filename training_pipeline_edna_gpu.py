@@ -146,48 +146,23 @@ logger = logging.getLogger(__name__)
 
 #############################################################################
 
-pipeline.preprocess_dataset(param_dict['trainset_dir'], 
-                    param_dict['exp_dir'], 
-                    param_dict['sr'], 
-                    param_dict['num_proc'], 
+pipeline.preprocess_dataset(param_dict,
+                            config_vars = config_vars, 
+                            now_dir = now_dir,
+                            logger = logger)
+
+
+pipeline.extract_f0_feature(param_dict,
+                            config_vars = config_vars, 
+                            now_dir = now_dir,
+                            logger = logger)
+
+pipeline.click_train(param_dict,
                     config_vars = config_vars, 
                     now_dir = now_dir,
                     logger = logger)
 
-
-pipeline.extract_f0_feature(param_dict['gpus'],
-                    param_dict['num_proc'],
-                    param_dict['f0method'],
-                    param_dict['if_f0'],
-                    param_dict['exp_dir'],
-                    param_dict['version'],
-                    param_dict['gpus_rmvpe'],
-                    config_vars = config_vars, 
-                    now_dir = now_dir,
-                    logger = logger)
-
-pipeline.click_train(
-    param_dict['exp_dir'],
-    param_dict['sr'],
-    param_dict['if_f0'],
-    param_dict['spk_id'],
-    param_dict['save_epoch'],
-    param_dict['total_epoch'],
-    param_dict['batch_size'],
-    param_dict['if_save_latest'],
-    param_dict['pretrained_G'],
-    param_dict['pretrained_D'],
-    param_dict['gpus'],
-    param_dict['if_cache_gpu'],
-    param_dict['if_save_every_weights'],
-    param_dict['version'],
-    config_vars = config_vars, 
-    now_dir = now_dir,
-    logger = logger
-)
-
-pipeline.train_index(param_dict['exp_dir'], 
-                    param_dict['version'],
+pipeline.train_index(param_dict,
                     config_vars = config_vars, 
                     now_dir = now_dir,
                     logger = logger)
