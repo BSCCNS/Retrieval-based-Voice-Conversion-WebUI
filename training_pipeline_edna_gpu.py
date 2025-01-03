@@ -47,8 +47,8 @@ import infer.modules.train.training_pipeline as pipeline
 train_root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 
 param_dict = {
-    'exp_dir': 'maria-2', 
-    'trainset_dir': f'{train_root}/data/1_16k_wavs',
+    'exp_dir': 'small-data_v1', 
+    'trainset_dir': f'{train_root}/data/small_dataset',
     'sr' : "40k",
     'num_proc': 54,
     'f0method' : "pm", 
