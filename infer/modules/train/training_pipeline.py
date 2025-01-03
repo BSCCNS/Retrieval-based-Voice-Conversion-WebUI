@@ -379,41 +379,26 @@ def if_done(done, p):
 #     return "训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"
 
 def click_train(params,
-    config_vars = None, 
-    now_dir = None,
-    logger = None
-):
+                config_vars = None, 
+                now_dir = None,
+                logger = None):
+    
     print('--------- Inside click_train')
 
     exp_dir1 = params.get('exp_dir')
-    sr2 = params.get('sr')
+    sr = params.get('sr')
     if_f0 = params.get('if_f0')
     spk_id = params.get('spk_id')
     save_epoch = params.get('save_epoch')
-    total_epoch11 = params.get('total_epoch')
-    batch_size12 = params.get('batch_size')
-    if_save_latest13 = params.get('if_save_latest')
-    pretrained_G14 = params.get('pretrained_G')
-    pretrained_D15 = params.get('pretrained_D')
-    gpus16 = params.get('gpus')
-    if_cache_gpu17 = params.get('if_cache_gpu')
-    if_save_every_weights18 = params.get('if_save_every_weights') 
-    version19 = params.get('version')
-
-#     sr = params.get('sr')
-#     if_f0 = params.get('if_f0')
-#     spk_id = params.get('spk_id')
-#     save_epoch = params.get('save_epoch')
-#     total_epoch = params.get('total_epoch')
-#     batch_size = params.get('batch_size')
-#     if_save_latest = params.get('if_save_latest')
-#     pretrained_G = params.get('pretrained_G')
-#     pretrained_D = params.get('pretrained_D')
-#     gpus = params.get('gpus')
-#     if_cache_gpu = params.get('if_cache_gpu')
-#     if_save_every_weights = params.get('if_save_every_weights')
-#     version = params.get('version')
-
+    total_epoch = params.get('total_epoch')
+    batch_size = params.get('batch_size')
+    if_save_latest = params.get('if_save_latest')
+    pretrained_G = params.get('pretrained_G')
+    pretrained_D = params.get('pretrained_D')
+    gpus = params.get('gpus')
+    if_cache_gpu = params.get('if_cache_gpu')
+    if_save_every_weights = params.get('if_save_every_weights') 
+    version = params.get('version')
 
     json_config = load_config_json()
 
@@ -424,7 +409,7 @@ def click_train(params,
     gt_wavs_dir = "%s/0_gt_wavs" % (exp_dir)
     feature_dir = (
         "%s/3_feature256" % (exp_dir)
-        if version19 == "v1"
+        if version == "v1"
         else "%s/3_feature768" % (exp_dir)
     )
     if if_f0:
@@ -468,33 +453,33 @@ def click_train(params,
                     spk_id,
                 )
             )
-    fea_dim = 256 if version19 == "v1" else 768
+    fea_dim = 256 if version == "v1" else 768
     if if_f0:
         for _ in range(2):
             opt.append(
                 "%s/logs/mute/0_gt_wavs/mute%s.wav|%s/logs/mute/3_feature%s/mute.npy|%s/logs/mute/2a_f0/mute.wav.npy|%s/logs/mute/2b-f0nsf/mute.wav.npy|%s"
-                % (now_dir, sr2, now_dir, fea_dim, now_dir, now_dir, spk_id)
+                % (now_dir, sr, now_dir, fea_dim, now_dir, now_dir, spk_id)
             )
     else:
         for _ in range(2):
             opt.append(
                 "%s/logs/mute/0_gt_wavs/mute%s.wav|%s/logs/mute/3_feature%s/mute.npy|%s"
-                % (now_dir, sr2, now_dir, fea_dim, spk_id)
+                % (now_dir, sr, now_dir, fea_dim, spk_id)
             )
     shuffle(opt)
     with open("%s/filelist.txt" % exp_dir, "w") as f:
         f.write("\n".join(opt))
     logger.debug("Write filelist done")
 
-    logger.info("Use gpus: %s", str(gpus16))
-    if pretrained_G14 == "":
+    logger.info("Use gpus: %s", str(gpus))
+    if pretrained_G == "":
         logger.info("No pretrained Generator")
-    if pretrained_D15 == "":
+    if pretrained_D == "":
         logger.info("No pretrained Discriminator")
-    if version19 == "v1" or sr2 == "40k":
-        config_path = "v1/%s.json" % sr2
+    if version == "v1" or sr == "40k":
+        config_path = "v1/%s.json" % sr
     else:
-        config_path = "v2/%s.json" % sr2
+        config_path = "v2/%s.json" % sr
     config_save_path = os.path.join(exp_dir, "config.json")
     if not pathlib.Path(config_save_path).exists():
         with open(config_save_path, "w", encoding="utf-8") as f:
@@ -506,24 +491,24 @@ def click_train(params,
                 sort_keys=True,
             )
             f.write("\n")
-    if gpus16:
+    if gpus:
         cmd = (
             '"%s" infer/modules/train/train.py -e "%s" -sr %s -f0 %s -bs %s -g %s -te %s -se %s %s %s -l %s -c %s -sw %s -v %s'
             % (
                 config_vars['python_cmd'], 
                 exp_dir1,
-                sr2,
+                sr,
                 1 if if_f0 else 0,
-                batch_size12,
-                gpus16,
-                total_epoch11,
+                batch_size,
+                gpus,
+                total_epoch,
                 save_epoch,
-                "-pg %s" % pretrained_G14 if pretrained_G14 != "" else "",
-                "-pd %s" % pretrained_D15 if pretrained_D15 != "" else "",
-                1 if if_save_latest13 == 'Yes' else 0,
-                1 if if_cache_gpu17 == 'Yes' else 0,
-                1 if if_save_every_weights18 == 'Yes' else 0,
-                version19,
+                "-pg %s" % pretrained_G if pretrained_G != "" else "",
+                "-pd %s" % pretrained_D if pretrained_D != "" else "",
+                1 if if_save_latest == 'Yes' else 0,
+                1 if if_cache_gpu == 'Yes' else 0,
+                1 if if_save_every_weights == 'Yes' else 0,
+                version,
             )
         )
     else:
@@ -532,17 +517,17 @@ def click_train(params,
             % (
                 config_vars['python_cmd'],
                 exp_dir1,
-                sr2,
+                sr,
                 1 if if_f0 else 0,
-                batch_size12,
-                total_epoch11,
+                batch_size,
+                total_epoch,
                 save_epoch,
-                "-pg %s" % pretrained_G14 if pretrained_G14 != "" else "",
-                "-pd %s" % pretrained_D15 if pretrained_D15 != "" else "",
-                1 if if_save_latest13 == 'Yes' else 0,
-                1 if if_cache_gpu17 == 'Yes' else 0,
-                1 if if_save_every_weights18 == 'Yes' else 0,
-                version19,
+                "-pg %s" % pretrained_G if pretrained_G != "" else "",
+                "-pd %s" % pretrained_D if pretrained_D != "" else "",
+                1 if if_save_latest == 'Yes' else 0,
+                1 if if_cache_gpu == 'Yes' else 0,
+                1 if if_save_every_weights == 'Yes' else 0,
+                version,
             )
         )
     logger.info("Execute: " + cmd)
