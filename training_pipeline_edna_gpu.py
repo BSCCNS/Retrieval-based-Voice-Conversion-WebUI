@@ -69,6 +69,9 @@ param_dict = {
 
 logger = logging.getLogger(__name__)
 
+
+
+
 #############################################################################
 
 config_vars = pipeline.read_config_vars()
@@ -88,7 +91,8 @@ pipeline.click_train(param_dict,
                     now_dir = now_dir,
                     logger = logger)
 
-pipeline.train_index(param_dict,
+pipeline.train_index(param_dict['exp_dir1'], 
+                     param_dict['version'],
                     config_vars = config_vars, 
                     now_dir = now_dir,
                     logger = logger)

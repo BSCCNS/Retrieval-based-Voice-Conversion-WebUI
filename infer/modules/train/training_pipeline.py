@@ -378,28 +378,21 @@ def click_train(params,
     p.wait()
     return "训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"
 
-# exp_dir1, version19,
-def train_index(params,
-                config_vars = None, 
-                now_dir = None,
-                logger = None):
+def train_index(exp_dir1, version19, 
+                    config_vars = None, 
+                    now_dir = None,
+                    logger = None):
     # exp_dir = "%s/logs/%s" % (now_dir, exp_dir1)
 
     print('------------------ Inside train_index')
-
-    ##############################################################
-    exp_dir = params.get('exp_dir')
-    version = params.get('version')
-    ##############################################################
-
     outside_index_root = os.getenv("outside_index_root")
     # n_cpu = 8
     print(f'------------------ now dir {now_dir}')
-    exp_dir = "logs/%s" % (exp_dir)
+    exp_dir = "logs/%s" % (exp_dir1)
     os.makedirs(exp_dir, exist_ok=True)
     feature_dir = (
         "%s/3_feature256" % (exp_dir)
-        if version == "v1"
+        if version19 == "v1"
         else "%s/3_feature768" % (exp_dir)
     )
     if not os.path.exists(feature_dir):
@@ -444,7 +437,7 @@ def train_index(params,
     infos.append("%s,%s" % (big_npy.shape, n_ivf))
     #yield "\n".join(infos)
     
-    index = faiss.index_factory(256 if version == "v1" else 768, "IVF%s,Flat" % n_ivf)
+    index = faiss.index_factory(256 if version19 == "v1" else 768, "IVF%s,Flat" % n_ivf)
     # index = faiss.index_factory(256if version19=="v1"else 768, "IVF%s,PQ128x4fs,RFlat"%n_ivf)
     infos.append("training")
     
@@ -456,7 +449,7 @@ def train_index(params,
     faiss.write_index(
         index,
         "%s/trained_IVF%s_Flat_nprobe_%s_%s_%s.index"
-        % (exp_dir, n_ivf, index_ivf.nprobe, exp_dir, version),
+        % (exp_dir, n_ivf, index_ivf.nprobe, exp_dir1, version19),
     )
     infos.append("adding")
     #yield "\n".join(infos)
@@ -467,25 +460,25 @@ def train_index(params,
     faiss.write_index(
         index,
         "%s/added_IVF%s_Flat_nprobe_%s_%s_%s.index"
-        % (exp_dir, n_ivf, index_ivf.nprobe, exp_dir, version),
+        % (exp_dir, n_ivf, index_ivf.nprobe, exp_dir1, version19),
     )
     infos.append(
         "成功构建索引 added_IVF%s_Flat_nprobe_%s_%s_%s.index"
-        % (n_ivf, index_ivf.nprobe, exp_dir, version)
+        % (n_ivf, index_ivf.nprobe, exp_dir1, version19)
     )
     try:
         link = os.link if platform.system() == "Windows" else os.symlink
         link(
             "%s/added_IVF%s_Flat_nprobe_%s_%s_%s.index"
-            % (exp_dir, n_ivf, index_ivf.nprobe, exp_dir, version),
+            % (exp_dir, n_ivf, index_ivf.nprobe, exp_dir1, version19),
             "%s/%s_IVF%s_Flat_nprobe_%s_%s_%s.index"
             % (
                 outside_index_root,
-                exp_dir,
+                exp_dir1,
                 n_ivf,
                 index_ivf.nprobe,
-                exp_dir,
-                version,
+                exp_dir1,
+                version19,
             ),
         )
         infos.append("链接索引到外部-%s" % (outside_index_root))
