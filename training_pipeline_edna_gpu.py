@@ -91,8 +91,7 @@ pipeline.click_train(param_dict,
                     now_dir = now_dir,
                     logger = logger)
 
-pipeline.train_index(param_dict['exp_dir'], 
-                     param_dict['version'],
+pipeline.train_index(param_dict,
                     config_vars = config_vars, 
                     now_dir = now_dir,
                     logger = logger)

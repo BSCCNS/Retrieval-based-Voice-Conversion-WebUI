@@ -378,15 +378,18 @@ def click_train(params,
     p.wait()
     return "训练结束, 您可查看控制台训练日志或实验文件夹下的train.log"
 
-def train_index(exp_dir1, version19, 
-                    config_vars = None, 
-                    now_dir = None,
-                    logger = None):
-    # exp_dir = "%s/logs/%s" % (now_dir, exp_dir1)
+def train_index(params,
+                config_vars = None, 
+                now_dir = None,
+                logger = None):
 
     print('------------------ Inside train_index')
+
+    exp_dir1 = params.get('exp_dir')
+    version19 = params.get('version')
+
     outside_index_root = os.getenv("outside_index_root")
-    # n_cpu = 8
+
     print(f'------------------ now dir {now_dir}')
     exp_dir = "logs/%s" % (exp_dir1)
     os.makedirs(exp_dir, exist_ok=True)
