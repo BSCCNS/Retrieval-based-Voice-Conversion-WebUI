@@ -474,7 +474,7 @@ def train_index(params,
                 now_dir = None,
                 logger = None):
 
-    print('------------------ Enter click_train')
+    print('------------------ Enter train_index')
 
     exp_dir1 = params.get('exp_dir')
     version19 = params.get('version')
