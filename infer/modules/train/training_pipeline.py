@@ -127,6 +127,20 @@ def preprocess_dataset(params,
     # logger.info(log)
     # yield log
 
+def if_done_multi(done, ps):
+    while 1:
+        # poll==None代表进程未结束
+        # 只要有一个进程未结束都不停
+        flag = 1
+        for p in ps:
+            if p.poll() is None:
+                flag = 0
+                sleep(0.5)
+                break
+        if flag == 1:
+            break
+    done[0] = True
+
 def extract_f0_feature(params,
                        config_vars = None, 
                        now_dir = None,
@@ -175,6 +189,74 @@ def extract_f0_feature(params,
             #         p,
             #     ),
             # ).start()
+
+        else:
+            if gpus_rmvpe != "-":
+                gpus_rmvpe = gpus_rmvpe.split("-")
+                leng = len(gpus_rmvpe)
+                ps = []
+                for idx, n_g in enumerate(gpus_rmvpe):
+                    cmd = (
+                        '"%s" infer/modules/train/extract/extract_f0_rmvpe.py %s %s %s "%s/logs/%s" %s '
+                        % (
+                            config.python_cmd,
+                            leng,
+                            idx,
+                            n_g,
+                            now_dir,
+                            exp_dir,
+                            config.is_half,
+                        )
+                    )
+                    logger.info("Execute: " + cmd)
+                    p = Popen(
+                        cmd, shell=True, cwd=now_dir
+                    )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
+                    ps.append(p)
+                # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
+                done = [False]
+                threading.Thread(
+                    target=if_done_multi,  #
+                    args=(
+                        done,
+                        ps,
+                    ),
+                ).start()
+            else:
+                cmd = (
+                    config.python_cmd
+                    + ' infer/modules/train/extract/extract_f0_rmvpe_dml.py "%s/logs/%s" '
+                    % (
+                        now_dir,
+                        exp_dir,
+                    )
+                )
+                logger.info("Execute: " + cmd)
+                p = Popen(
+                    cmd, shell=True, cwd=now_dir
+                )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
+                p.wait()
+                done = [True]
+        # while 1:
+        #     with open(
+        #         "%s/logs/%s/extract_f0_feature.log" % (now_dir, exp_dir), "r"
+        #     ) as f:
+        #         yield (f.read())
+        #     sleep(1)
+        #     if done[0]:
+        #         break
+        # with open("%s/logs/%s/extract_f0_feature.log" % (now_dir, exp_dir), "r") as f:
+        #     log = f.read()
+        # logger.info(log)
+        # yield log
+    # 对不同part分别开多进程
+    """
+    n_part=int(sys.argv[1])
+    i_part=int(sys.argv[2])
+    i_gpu=sys.argv[3]
+    exp_dir=sys.argv[4]
+    os.environ["CUDA_VISIBLE_DEVICES"]=str(i_gpu)
+    """
 
     leng = len(gpus)
     ps = []
