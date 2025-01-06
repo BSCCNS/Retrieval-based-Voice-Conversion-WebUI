@@ -45,7 +45,7 @@ model_name = rvc_dict["model_name"]
 index_file = rvc_dict["index_file"]
 
 #model_path = f'{root}/assets/{model_name}/{model_name}.pth'
-model_path = f'assets/weights/{model_name}.pth' 
+model_path = f'{model_name}.pth' 
 index_path = f'{root}/assets/{model_name}/{index_file}'
 hubert_path = f'{root}/assets/hubert/{rvc_dict["hubert_file"]}'
 input_path = rvc_dict["input_path"]
