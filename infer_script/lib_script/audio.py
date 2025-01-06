@@ -32,7 +32,8 @@ def wav2(i, o, format):
 
 def audio2(i, o, format, sr):
     
-    inp = av.open(i, "rb")
+    #inp = av.open(i, "rb")
+    inp = av.open(i, "r")
     out = av.open(o, "wb", format=format)
     if format == "ogg":
         format = "libvorbis"
