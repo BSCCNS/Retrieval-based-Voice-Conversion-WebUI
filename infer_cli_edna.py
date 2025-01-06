@@ -12,10 +12,10 @@ load_dotenv()
 ## model
 #######################################################
 
-root = '/Users/tomasandrade/Documents/BSC/ICHOIR/Retrieval-based-Voice-Conversion'
+root = '.'
 
 root_model = f'{root}/assets'
-root_output = '.'
+root_output = 'audio_rvc_output'
 
 model_name = 'maria-200_rmvpe_gpu'
 
@@ -28,18 +28,8 @@ hubert_path = f'{root_model}/hubert/hubert_base.pt'
 ## input
 #######################################################
 
-root_input = '/Users/tomasandrade/Documents/BSC/ICHOIR/Retrieval-based-Voice-Conversion/output'
+root_input = 'data/ame/'
 input_audio =  f'{root_input}/ame_campana_1.wav'
-
-
-# rvc_dict = {
-#     "model_pth": model_pth,
-#     "index_file": index_file,
-#     "hubert_path": hubert_path,
-#     "input_audio": input_audio,
-#     "f0_method": "rmvpe",
-#     "protect": 0.33,
-#     "f0_up_key": 0}
 
 rvc_dict = {
     "model_pth": model_pth,
