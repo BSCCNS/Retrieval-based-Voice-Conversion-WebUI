@@ -56,8 +56,8 @@ def load_audio(file, sr):
             "You input a wrong audio path that does not exists, please fix it!"
         )
     try:
-        with open(file, "rb") as f:
-        #with open(file, "r") as f:
+        #with open(file, "rb") as f:
+        with open(file, "r") as f:
             with BytesIO() as out:
                 audio2(f, out, "f32le", sr)
                 return np.frombuffer(out.getvalue(), np.float32).flatten()
