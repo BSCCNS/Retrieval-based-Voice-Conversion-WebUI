@@ -1,110 +1,112 @@
-# import os
-# import traceback
-# from io import BytesIO
-
-# import av
-# import librosa
-# import numpy as np
-
-import platform, os
-import ffmpeg
-import numpy as np
-import av
-from io import BytesIO
+import os
 import traceback
-import re
+from io import BytesIO
+
+import av
+import librosa
+import numpy as np
+
+def wav2(i, o, format):
+    inp = av.open(i, "rb")
+    if format == "m4a":
+        format = "mp4"
+    out = av.open(o, "wb", format=format)
+    if format == "ogg":
+        format = "libvorbis"
+    if format == "mp4":
+        format = "aac"
+
+    ostream = out.add_stream(format)
+
+    for frame in inp.decode(audio=0):
+        for p in ostream.encode(frame):
+            out.mux(p)
+
+    for p in ostream.encode(None):
+        out.mux(p)
+
+    out.close()
+    inp.close()
 
 
-# def wav2(i, o, format):
-#     inp = av.open(i, "rb")
-#     if format == "m4a":
-#         format = "mp4"
-#     out = av.open(o, "wb", format=format)
-#     if format == "ogg":
-#         format = "libvorbis"
-#     if format == "mp4":
-#         format = "aac"
-
-#     ostream = out.add_stream(format)
-
-#     for frame in inp.decode(audio=0):
-#         for p in ostream.encode(frame):
-#             out.mux(p)
-
-#     for p in ostream.encode(None):
-#         out.mux(p)
-
-#     out.close()
-#     inp.close()
-
-
-# def audio2(i, o, format, sr):
+def audio2(i, o, format, sr):
     
-#     #inp = av.open(i, "rb")
-#     inp = av.open(i, "r")
-#     out = av.open(o, "wb", format=format)
-#     if format == "ogg":
-#         format = "libvorbis"
-#     if format == "f32le":
-#         format = "pcm_f32le"
+    #inp = av.open(i, "rb")
+    #out = av.open(o, "wb", format=format)
 
-#     ostream = out.add_stream(format, channels=1)
-#     ostream.sample_rate = sr
+    inp = av.open(i, "r")
+    out = av.open(o, "w", format=format)
+    if format == "ogg":
+        format = "libvorbis"
+    if format == "f32le":
+        format = "pcm_f32le"
 
-#     for frame in inp.decode(audio=0):
-#         for p in ostream.encode(frame):
-#             out.mux(p)
+    ostream = out.add_stream(format, channels=1)
+    ostream.sample_rate = sr
 
-#     out.close()
-#     inp.close()
+    for frame in inp.decode(audio=0):
+        for p in ostream.encode(frame):
+            out.mux(p)
 
+    out.close()
+    inp.close()
 
-# def load_audio(file, sr):
-#     if not os.path.exists(file):
-#         raise RuntimeError(
-#             "You input a wrong audio path that does not exists, please fix it!"
-#         )
-#     try:
-#         #with open(file, "rb") as f:
-#         with open(file, "r") as f:
-#             with BytesIO() as out:
-#                 audio2(f, out, "f32le", sr)
-#                 return np.frombuffer(out.getvalue(), np.float32).flatten()
-
-#     except AttributeError:
-#         audio = file[1] / 32768.0
-#         if len(audio.shape) == 2:
-#             audio = np.mean(audio, -1)
-#         return librosa.resample(audio, orig_sr=file[0], target_sr=16000)
-
-#     except Exception:
-#         raise RuntimeError(traceback.format_exc())
 
 def load_audio(file, sr):
-    try:
-        # https://github.com/openai/whisper/blob/main/whisper/audio.py#L26
-        # This launches a subprocess to decode audio while down-mixing and resampling as necessary.
-        # Requires the ffmpeg CLI and `ffmpeg-python` package to be installed.
-        file = clean_path(file)  # 防止小白拷路径头尾带了空格和"和回车
-        if os.path.exists(file) == False:
-            raise RuntimeError(
-                "You input a wrong audio path that does not exists, please fix it!"
-            )
-        out, _ = (
-            ffmpeg.input(file, threads=0)
-            .output("-", format="f32le", acodec="pcm_f32le", ac=1, ar=sr)
-            .run(cmd=["ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True)
+    if not os.path.exists(file):
+        raise RuntimeError(
+            "You input a wrong audio path that does not exists, please fix it!"
         )
-    except Exception as e:
-        traceback.print_exc()
-        raise RuntimeError(f"Failed to load audio: {e}")
+    try:
+        #with open(file, "rb") as f:
+        with open(file, "r") as f:
+            with BytesIO() as out:
+                audio2(f, out, "f32le", sr)
+                return np.frombuffer(out.getvalue(), np.float32).flatten()
 
-    return np.frombuffer(out, np.float32).flatten()
+    except AttributeError:
+        audio = file[1] / 32768.0
+        if len(audio.shape) == 2:
+            audio = np.mean(audio, -1)
+        return librosa.resample(audio, orig_sr=file[0], target_sr=16000)
+
+    except Exception:
+        raise RuntimeError(traceback.format_exc())
+
+
+# import platform, os
+# import ffmpeg
+# import numpy as np
+# import av
+# from io import BytesIO
+# import traceback
+# import re
+
+# def load_audio(file, sr):
+#     try:
+#         # https://github.com/openai/whisper/blob/main/whisper/audio.py#L26
+#         # This launches a subprocess to decode audio while down-mixing and resampling as necessary.
+#         # Requires the ffmpeg CLI and `ffmpeg-python` package to be installed.
+#         file = clean_path(file)  # 防止小白拷路径头尾带了空格和"和回车
+#         if os.path.exists(file) == False:
+#             raise RuntimeError(
+#                 "You input a wrong audio path that does not exists, please fix it!"
+#             )
+#         out, _ = (
+#             ffmpeg.input(file, threads=0)
+#             .output("-", format="f32le", acodec="pcm_f32le", ac=1, ar=sr)
+#             .run(cmd=["ffmpeg", "-nostdin"], capture_stdout=True, capture_stderr=True)
+#         )
+#     except Exception as e:
+#         traceback.print_exc()
+#         raise RuntimeError(f"Failed to load audio: {e}")
+
+#     return np.frombuffer(out, np.float32).flatten()
 
 
 
-def clean_path(path_str):
-    if platform.system() == "Windows":
-        path_str = path_str.replace("/", "\\")
-    path_str = re.sub(r'[\u202a\u202b\u202c\u202d\u202e]', '', path_str)  # 移除 Unicode 控制字符
-    return path_str.strip(" ").strip('"').strip("\n").strip('"').strip(" ")
+# def clean_path(path_str):
+#     if platform.system() == "Windows":
+#         path_str = path_str.replace("/", "\\")
+#     path_str = re.sub(r'[\u202a\u202b\u202c\u202d\u202e]', '', path_str)  # 移除 Unicode 控制字符
+#     return path_str.strip(" ").strip('"').strip("\n").strip('"').strip(" ")
