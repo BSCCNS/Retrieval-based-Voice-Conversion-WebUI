@@ -33,7 +33,7 @@ root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI
 #input_audio =  f'{root_input}/ame_campana_1.wav'
 
 rvc_dict = {
-    "model_name": "maria-200_rmvpe_gpu",
+    "model_name": "maria-200-rmvpe_gpu",
     "index_file": "added_IVF3808_Flat_nprobe_1_maria-200-rmvpe_gpu_v2.index",
     "hubert_file": "hubert_base.pt",
     "input_path": "data/ame/ame_campana_1.wav",
