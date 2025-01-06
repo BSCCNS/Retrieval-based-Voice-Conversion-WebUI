@@ -20,7 +20,7 @@ root_output = 'audio_rvc_output'
 model_name = 'maria-200_rmvpe_gpu'
 
 # model_pth = f'{root_model}/{model_name}/{model_name}.pth'
-model_pth = 'maria-200_rmvpe_gpu.pth'
+model_pth = 'maria-200-rmvpe_gpu.pth' # assets/weights/maria-200-rmvpe_gpu.pth
 index_file = f'{root_model}/{model_name}/added_IVF3808_Flat_nprobe_1_maria-200-rmvpe_gpu_v2.index'
 
 hubert_path = f'{root_model}/hubert/hubert_base.pt'
