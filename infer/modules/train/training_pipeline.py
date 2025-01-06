@@ -192,6 +192,7 @@ def extract_f0_feature(params,
 
         else:
             if gpus_rmvpe != "-":
+                print('Extracting f0 with extract_f0_rmvpe, if enough gpus?!')
                 gpus_rmvpe = gpus_rmvpe.split("-")
                 leng = len(gpus_rmvpe)
                 ps = []
@@ -199,13 +200,13 @@ def extract_f0_feature(params,
                     cmd = (
                         '"%s" infer/modules/train/extract/extract_f0_rmvpe.py %s %s %s "%s/logs/%s" %s '
                         % (
-                            config.python_cmd,
+                            config_vars['python_cmd'],
                             leng,
                             idx,
                             n_g,
                             now_dir,
                             exp_dir,
-                            config.is_half,
+                            config_vars['is_half'],
                         )
                     )
                     logger.info("Execute: " + cmd)
@@ -223,8 +224,9 @@ def extract_f0_feature(params,
                     ),
                 ).start()
             else:
+                print('Extracting f0 with rmvpe_dml')
                 cmd = (
-                    config.python_cmd
+                    config_vars['python_cmd']
                     + ' infer/modules/train/extract/extract_f0_rmvpe_dml.py "%s/logs/%s" '
                     % (
                         now_dir,
@@ -236,6 +238,7 @@ def extract_f0_feature(params,
                     cmd, shell=True, cwd=now_dir
                 )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
                 p.wait()
+                p.communicate() # TA-comment: needed??!!
                 done = [True]
         # while 1:
         #     with open(
@@ -471,7 +474,7 @@ def train_index(params,
                 now_dir = None,
                 logger = None):
 
-    print('------------------ Enter click_train')
+    print('------------------ Enter train_index')
 
     exp_dir1 = params.get('exp_dir')
     version19 = params.get('version')
