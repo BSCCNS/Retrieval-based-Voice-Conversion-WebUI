@@ -814,18 +814,22 @@ with gr.Blocks(title="RVC WebUI") as app:
         )
     )
     with gr.Tabs():
-        with gr.TabItem(i18n("模型推理")):
+        with gr.TabItem(i18n("模型推理")): # Model Inference
             with gr.Row():
+                # Inferencing voice:
                 sid0 = gr.Dropdown(label=i18n("推理音色"), choices=sorted(names))
                 with gr.Column():
                     refresh_button = gr.Button(
+                        # Refresh voice list and index path
                         i18n("刷新音色列表和索引路径"), variant="primary"
                     )
+                    # Unload voice to save GPU memory:
                     clean_button = gr.Button(i18n("卸载音色省显存"), variant="primary")
                 spk_item = gr.Slider(
                     minimum=0,
                     maximum=2333,
                     step=1,
+                    # Select Speaker/Singer ID:
                     label=i18n("请选择说话人id"),
                     value=0,
                     visible=False,
@@ -834,34 +838,46 @@ with gr.Blocks(title="RVC WebUI") as app:
                 clean_button.click(
                     fn=clean, inputs=[], outputs=[sid0], api_name="infer_clean"
                 )
+                                #Single Inference
             with gr.TabItem(i18n("单次推理")):
                 with gr.Group():
                     with gr.Row():
                         with gr.Column():
                             vc_transform0 = gr.Number(
+                                # Transpose (integer, number of semitones, raise by 
+                                # an octave: 12, lower by an octave: -12):
                                 label=i18n("变调(整数, 半音数量, 升八度12降八度-12)"),
                                 value=0,
                             )
                             input_audio0 = gr.Textbox(
                                 label=i18n(
+                                    # Enter the path of the audio file to be processed 
+                                    # (default is the correct format example):
                                     "输入待处理音频文件路径(默认是正确格式示例)"
                                 ),
                                 placeholder="C:\\Users\\Desktop\\audio_example.wav",
                             )
                             file_index1 = gr.Textbox(
                                 label=i18n(
+                                    # Path to the feature index file. Leave blank to use 
+                                    # the selected result from the dropdown:
                                     "特征检索库文件路径,为空则使用下拉的选择结果"
                                 ),
                                 placeholder="C:\\Users\\Desktop\\model_example.index",
                                 interactive=True,
                             )
                             file_index2 = gr.Dropdown(
+                                # Auto-detect index path and select from the dropdown:
                                 label=i18n("自动检测index路径,下拉式选择(dropdown)"),
                                 choices=sorted(index_paths),
                                 interactive=True,
                             )
                             f0method0 = gr.Radio(
                                 label=i18n(
+                                    # Select the pitch extraction algorithm ('pm': faster extraction
+                                    # but lower-quality speech; 'harvest': better bass but extremely 
+                                    # slow; 'crepe': better quality but GPU intensive), 'rmvpe': 
+                                    # best quality, and little GPU requirement
                                     "选择音高提取算法,输入歌声可用pm提速,harvest低音好但巨慢无比,crepe效果好但吃GPU,rmvpe效果最好且微吃GPU"
                                 ),
                                 choices=(
@@ -877,6 +893,8 @@ with gr.Blocks(title="RVC WebUI") as app:
                             resample_sr0 = gr.Slider(
                                 minimum=0,
                                 maximum=48000,
+                                # Resample the output audio in post-processing to the 
+                                # final sample rate. Set to 0 for no resampling:
                                 label=i18n("后处理重采样至最终采样率，0为不进行重采样"),
                                 value=0,
                                 step=1,
@@ -886,6 +904,10 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 minimum=0,
                                 maximum=1,
                                 label=i18n(
+                                    # Adjust the volume envelope scaling. Closer to 0, the more it mimicks
+                                    #  the volume of the original vocals. Can help mask noise and make 
+                                    # volume sound more natural when set relatively low. Closer to 
+                                    # 1 will be more of a consistently loud volume:
                                     "输入源音量包络替换输出音量包络融合比例，越靠近1越使用输出包络"
                                 ),
                                 value=0.25,
@@ -895,6 +917,9 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 minimum=0,
                                 maximum=0.5,
                                 label=i18n(
+                                    # Protect voiceless consonants and breath sounds to prevent artifacts such as tearing 
+                                    # in electronic music. Set to 0.5 to disable. Decrease the value to increase protection, 
+                                    # but it may reduce indexing accuracy:
                                     "保护清辅音和呼吸声，防止电音撕裂等artifact，拉满0.5不开启，调低加大保护力度但可能降低索引效果"
                                 ),
                                 value=0.33,
@@ -905,6 +930,8 @@ with gr.Blocks(title="RVC WebUI") as app:
                                 minimum=0,
                                 maximum=7,
                                 label=i18n(
+                                    # If >=3: apply median filtering to the harvested pitch results. 
+                                    # The value represents the filter radius and can reduce breathiness.
                                     ">=3则使用对harvest音高识别的结果使用中值滤波，数值为滤波半径，使用可以削弱哑音"
                                 ),
                                 value=3,
@@ -914,12 +941,15 @@ with gr.Blocks(title="RVC WebUI") as app:
                             index_rate1 = gr.Slider(
                                 minimum=0,
                                 maximum=1,
+                                # Search feature ratio (controls accent strength, too high has artifacting):
                                 label=i18n("检索特征占比"),
                                 value=0.75,
                                 interactive=True,
                             )
                             f0_file = gr.File(
                                 label=i18n(
+                                    # F0 curve file (optional). One pitch per line. 
+                                    # Replaces the default F0 and pitch modulation:
                                     "F0曲线文件, 可选, 一行一个音高, 代替默认F0及升降调"
                                 ),
                                 visible=False,
@@ -938,10 +968,14 @@ with gr.Blocks(title="RVC WebUI") as app:
                             # )
                 with gr.Group():
                     with gr.Column():
+                        # Stop audio conversion
                         but0 = gr.Button(i18n("转换"), variant="primary")
                         with gr.Row():
+                            # Output information
                             vc_output1 = gr.Textbox(label=i18n("输出信息"))
                             vc_output2 = gr.Audio(
+                                # Export audio (click on the three dots in the 
+                                # lower right corner to download)
                                 label=i18n("输出音频(右下角三个点,点了可以下载)")
                             )
 
