@@ -1,0 +1,9 @@
+{
+"model_name": "maria-200-rmvpe_gpu",
+"index_file": "added_IVF3808_Flat_nprobe_1_maria-200-rmvpe_gpu_v2.index",
+"hubert_file": "hubert_base.pt",
+"input_path": "data/ame/ame_campana_1.wav",
+"f0_method": "rmvpe",
+"protect": 0.33,
+"f0_up_key": 0
+}
