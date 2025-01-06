@@ -31,11 +31,8 @@ def wav2(i, o, format):
 
 def audio2(i, o, format, sr):
     
-    #inp = av.open(i, "rb")
-    #out = av.open(o, "wb", format=format)
-
-    inp = av.open(i, "r")
-    out = av.open(o, "w", format=format)
+    inp = av.open(i, "rb")
+    out = av.open(o, "wb", format=format)
     if format == "ogg":
         format = "libvorbis"
     if format == "f32le":
@@ -58,8 +55,8 @@ def load_audio(file, sr):
             "You input a wrong audio path that does not exists, please fix it!"
         )
     try:
-        #with open(file, "rb") as f:
-        with open(file, "r") as f:
+        with open(file, "rb") as f:
+        #with open(file, "r") as f:
             with BytesIO() as out:
                 audio2(f, out, "f32le", sr)
                 return np.frombuffer(out.getvalue(), np.float32).flatten()
