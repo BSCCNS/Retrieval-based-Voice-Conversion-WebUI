@@ -54,12 +54,13 @@ vc = VC()
 vc.get_vc(model_path, index_file = index_path)
 
 
-print('--------------- f0 method rmvpe')
+print('--------------- Processing audio')
 tgt_sr, audio_opt, times, _ = vc.vc_inference(1, input_path, #Path(input_audio),
                                                 hubert_path = hubert_path,
                                                 f0_method = f0_method,
                                                 f0_up_key = f0_up_key,
                                                 protect = protect)
 
+print(f'--------------- Saving audio to {output_path}')
 wavfile.write(output_path, tgt_sr, audio_opt)
 
