@@ -59,5 +59,4 @@ tgt_sr, audio_opt, times, _ = vc.vc_inference(1, input_audio, #Path(input_audio)
                                                 f0_up_key = f0_up_key,
                                                 protect = protect)
 
-output_path = f'{root}/{wav_name}_by_{model_name}_f0_method{f0_method}_protect{protect}_f0_up_key_{f0_up_key}.wav'
 wavfile.write(output_path, tgt_sr, audio_opt)
