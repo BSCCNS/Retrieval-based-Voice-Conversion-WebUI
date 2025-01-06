@@ -11,20 +11,25 @@ import numpy as np
 import soundfile as sf
 import torch
 
+# TA-change: changed all imports
 #from rvc.configs.config import Config
 #from rvc.lib.audio import load_audio, wav2
 
-from configs.config import Config
-from lib.audio import load_audio, wav2
+from infer_script.configs_script.config import Config
+from infer_script.lib_script.audio import load_audio #, wav2
 
-from rvc.lib.infer_pack.models import (
+#from rvc.lib.infer_pack.models import (
+from infer_script.lib_script.infer_pack.models import (
     SynthesizerTrnMs256NSFsid,
     SynthesizerTrnMs256NSFsid_nono,
     SynthesizerTrnMs768NSFsid,
     SynthesizerTrnMs768NSFsid_nono,
 )
-from rvc.modules.vc.pipeline import Pipeline
-from rvc.modules.vc.utils import *
+# from rvc.modules.vc.pipeline import Pipeline
+# from rvc.modules.vc.utils import *
+
+from infer_script.vc_script.pipeline import Pipeline
+from infer_script.vc_script.utils import *
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -41,6 +46,7 @@ class VC:
         self.version: str | None = None
         self.hubert_model: any = None
 
+        print('here')
         self.config = Config()
 
     def get_vc(self, sid: Union[str, Path], *to_return_protect: int, index_file = None):
