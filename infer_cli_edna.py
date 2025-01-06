@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import json
 
 from dotenv import load_dotenv
 from scipy.io import wavfile
@@ -44,7 +45,6 @@ rvc_dict = {
 model_name = rvc_dict["model_name"]
 index_file = rvc_dict["index_file"]
 
-#model_path = f'{root}/assets/{model_name}/{model_name}.pth'
 model_path = f'{model_name}.pth' 
 index_path = f'{root}/logs/{model_name}/{index_file}'
 hubert_path = f'{root}/assets/hubert/{rvc_dict["hubert_file"]}'
@@ -55,7 +55,14 @@ f0_method = rvc_dict["f0_method"]
 protect = rvc_dict["protect"]
 f0_up_key = rvc_dict["f0_up_key"]
 
-output_path = f'{root}/audio_rvc_output/{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}.wav'
+experiment_name = f'{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}'
+experiment_dir = f'{root}/audio_rvc_output/{experiment_name}'
+
+os.mkdir(experiment_dir)
+output_path = f'{experiment_dir}/{experiment_name}.wav'
+
+with open(f"{experiment_dir}/metadata.json", "w") as outfile: 
+    json.dump(rvc_dict, outfile)
 
 vc = VC()
 vc.get_vc(model_path, index_file = index_path)
@@ -69,3 +76,4 @@ tgt_sr, audio_opt, times, _ = vc.vc_inference(1, input_path, #Path(input_audio),
                                                 protect = protect)
 
 wavfile.write(output_path, tgt_sr, audio_opt)
+
