@@ -46,7 +46,7 @@ f0_method = rvc_dict["f0_method"]
 protect = rvc_dict["protect"]
 f0_up_key = rvc_dict["f0_up_key"]
 
-output_path = f'{root}/{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}.wav'
+output_path = f'{root}/audio_rvc_output/{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}.wav'
 
 vc = VC()
 vc.get_vc(model_pth, index_file = index_file)
