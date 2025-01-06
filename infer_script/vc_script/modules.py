@@ -16,7 +16,7 @@ import torch
 #from rvc.lib.audio import load_audio, wav2
 
 from infer_script.configs_script.config import Config
-from infer_script.lib_script.audio import load_audio, wav2
+from infer_script.lib_script.audio import load_audio #, wav2
 
 #from rvc.lib.infer_pack.models import (
 from infer_script.lib_script.infer_pack.models import (
