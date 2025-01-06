@@ -52,7 +52,7 @@ vc.get_vc(model_pth, index_file = index_file)
 
 
 print('--------------- f0 method rmvpe')
-tgt_sr, audio_opt, times, _ = vc.vc_inference(1, Path(input_audio),
+tgt_sr, audio_opt, times, _ = vc.vc_inference(1, input_audio, #Path(input_audio),
                                                 hubert_path = hubert_path,
                                                 f0_method = f0_method,
                                                 f0_up_key = f0_up_key,
