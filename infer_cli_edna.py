@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import json
+import argparse
 
 from dotenv import load_dotenv
 from scipy.io import wavfile
@@ -13,34 +14,32 @@ load_dotenv()
 ## model
 #######################################################
 
+# rvc_dict = {
+#     "model_name": "maria-200-rmvpe_gpu",
+#     "index_file": "added_IVF3808_Flat_nprobe_1_maria-200-rmvpe_gpu_v2.index",
+#     "hubert_file": "hubert_base.pt",
+#     "input_path": "data/ame/ame_campana_1.wav",
+#     "f0_method": "rmvpe",
+#     "protect": 0.33,
+#     "f0_up_key": 0}
+
+parser = argparse.ArgumentParser(
+                    prog='Conversion Pipeline',
+                    description='Runs conversion pipeline for RVC',
+                    epilog='Ask me for help')
+parser.add_argument('parfile') 
+
+def read_param_dict(parser):
+    args = parser.parse_args()
+    json_file = open(args.parfile)
+    param_dict = json.load(json_file)
+    json_file.close()
+
+    return param_dict
+
+rvc_dict = read_param_dict(parser)
+
 root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
-
-# root_model = f'{root}/assets'
-# root_output = 'audio_rvc_output'
-
-# model_name = 'maria-200_rmvpe_gpu'
-
-# # model_pth = f'{root_model}/{model_name}/{model_name}.pth'
-# model_pth = f'{root}/assets/weights/maria-200-rmvpe_gpu.pth' 
-# index_file = f'{root_model}/{model_name}/added_IVF3808_Flat_nprobe_1_maria-200-rmvpe_gpu_v2.index'
-
-# hubert_path = f'{root_model}/hubert/hubert_base.pt'
-
-#######################################################
-## input
-#######################################################
-
-#root_input = 'data/ame/'
-#input_audio =  f'{root_input}/ame_campana_1.wav'
-
-rvc_dict = {
-    "model_name": "maria-200-rmvpe_gpu",
-    "index_file": "added_IVF3808_Flat_nprobe_1_maria-200-rmvpe_gpu_v2.index",
-    "hubert_file": "hubert_base.pt",
-    "input_path": "data/ame/ame_campana_1.wav",
-    "f0_method": "rmvpe",
-    "protect": 0.33,
-    "f0_up_key": 0}
 
 model_name = rvc_dict["model_name"]
 index_file = rvc_dict["index_file"]
