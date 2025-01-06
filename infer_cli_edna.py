@@ -12,7 +12,7 @@ load_dotenv()
 ## model
 #######################################################
 
-root = '.'
+root = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI'
 
 root_model = f'{root}/assets'
 root_output = 'audio_rvc_output'
