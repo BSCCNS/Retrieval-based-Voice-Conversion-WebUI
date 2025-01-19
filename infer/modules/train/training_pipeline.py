@@ -179,7 +179,9 @@ def extract_f0_feature(params,
             logger.info("Execute: " + cmd)
             p = Popen(
                 cmd, shell=True, cwd=now_dir
-            )  # , stdin=PIPE, stdout=PIPE,stderr=PIPE
+            )
+            p.wait()
+            p.communicate()  # , stdin=PIPE, stdout=PIPE,stderr=PIPE
             # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
             # done = [False]
             # threading.Thread(
@@ -212,7 +214,9 @@ def extract_f0_feature(params,
                     logger.info("Execute: " + cmd)
                     p = Popen(
                         cmd, shell=True, cwd=now_dir
-                    )  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
+                    )
+                    p.wait()
+                    p.communicate()  # , shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, cwd=now_dir
                     ps.append(p)
                 # 煞笔gr, popen read都非得全跑完了再一次性读取, 不用gr就正常读一句输出一句;只能额外弄出一个文本流定时读
                 done = [False]
