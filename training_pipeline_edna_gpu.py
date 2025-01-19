@@ -25,6 +25,10 @@ parser.add_argument('parfile')
 logger = logging.getLogger(__name__)
 
 param_dict = pipeline.read_param_dict(parser)
+
+print('Running pipeline with parameters')
+print(param_dict)
+
 config_vars = pipeline.read_config_vars()
 
 pipeline.preprocess_dataset(param_dict,

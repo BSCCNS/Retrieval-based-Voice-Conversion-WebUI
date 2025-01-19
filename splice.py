@@ -3,12 +3,12 @@ from pydub.utils import make_chunks
 import glob
 import os
 
-out_dir = '/Users/tomasandrade/Desktop/violeta/wav_mono_48k_spliced'
+out_dir = '/Users/tomasandrade/Documents/BSC/ICHOIR/violeta/wav_mono_16k_spliced'
 os.mkdir(out_dir)
 
-chunk_length_ms = 1000*8 # pydub calculates in millisec
+chunk_length_ms = 1000*16 # pydub calculates in millisec
 
-files = glob.glob('/Users/tomasandrade/Desktop/violeta/wav_mono_48k/*.wav', recursive=False)
+files = glob.glob('/Users/tomasandrade/Documents/BSC/ICHOIR/violeta/wav_mono_16k/*.wav', recursive=False)
 print(files)
 
 
