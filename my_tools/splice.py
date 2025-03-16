@@ -3,12 +3,18 @@ from pydub.utils import make_chunks
 import glob
 import os
 
-out_dir = '/Users/tomasandrade/Documents/BSC/ICHOIR/violeta/wav_mono_16k_spliced'
+
+#root = '/Users/tomasandrade/Documents/BSC/ICHOIR/organos'
+#folder_path = f'{root}'
+#out_dir = f'{folder_path}/flat'
+
+root = '/Users/tomasandrade/Documents/BSC/ICHOIR/organos/flat'
+out_dir = f'{root}/spliced'
 os.mkdir(out_dir)
 
 chunk_length_ms = 1000*16 # pydub calculates in millisec
 
-files = glob.glob('/Users/tomasandrade/Documents/BSC/ICHOIR/violeta/wav_mono_16k/*.wav', recursive=False)
+files = glob.glob(f'{root}/*.wav', recursive=False)
 print(files)
 
 
