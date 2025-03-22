@@ -62,7 +62,10 @@ for i in range(2):
                                                     f0_method = f0_method,
                                                     f0_up_key = f0_up_key,
                                                     protect = protect)
-
+    
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
+
+    input_path = output_path
+    # this ^^^^^^^^^^^^^^^^^
 
