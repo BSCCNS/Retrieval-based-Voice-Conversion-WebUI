@@ -40,6 +40,7 @@ wav_name = input_path.split('/')[-1].split('.wav')[-2]
 f0_method = rvc_dict["f0_method"]
 protect = rvc_dict["protect"]
 f0_up_key = rvc_dict["f0_up_key"]
+rms_mix_rate = rvc_dict["rms_mix_rate"]
 
 experiment_name = f'{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}_loop'
 experiment_dir = f'{root}/audio_rvc_output/{experiment_name}'
@@ -61,7 +62,8 @@ for i in range(2):
                                                     hubert_path = hubert_path,
                                                     f0_method = f0_method,
                                                     f0_up_key = f0_up_key,
-                                                    protect = protect)
+                                                    protect = protect,
+                                                    rms_mix_rate = rms_mix_rate)
     
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
