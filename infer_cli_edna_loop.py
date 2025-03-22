@@ -41,7 +41,7 @@ f0_method = rvc_dict["f0_method"]
 protect = rvc_dict["protect"]
 f0_up_key = rvc_dict["f0_up_key"]
 
-experiment_name = f'{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}'
+experiment_name = f'{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}_loop'
 experiment_dir = f'{root}/audio_rvc_output/{experiment_name}'
 
 os.mkdir(experiment_dir)
