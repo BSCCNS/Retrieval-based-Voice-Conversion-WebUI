@@ -158,7 +158,7 @@ class VC:
 
             tgt_sr = resample_sr if self.tgt_sr != resample_sr >= 16000 else self.tgt_sr
 
-            logging.info(f'resample_sr : {resample_sr}')
+            logging.info(f'resample_sr : {resample_sr}; tgt_sr : {tgt_sr}')
 
             return tgt_sr, audio_opt, times, None
 
