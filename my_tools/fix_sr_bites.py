@@ -33,16 +33,15 @@ except:
 for file in files[0:3]:
 
     print(file)
-    target = file #.split(root)[-1].replace('.wav', '_48k.wav')
+    target = file.split(root, '/')[-1] #.replace('.wav', '_48k.wav')
     output_file = f'{out_dir}/{target}'
 
-    audio = AudioSegment.from_wav(file)
+    print(output_file)
 
-    #if audio.frame_rate >= min_sr:
-    downsampled_audio = audio.set_frame_rate(TARGET_SAMPLE_RATE)
-    # Export the modified audio
-    #downsampled_audio.export(output_file, format="wav")
-    downsampled_audio.export(output_file, format="wav", parameters=["-acodec", TARGET_BIT_DEPTH])
+    #audio = AudioSegment.from_wav(file)
+
+    #downsampled_audio = audio.set_frame_rate(TARGET_SAMPLE_RATE)
+    #downsampled_audio.export(output_file, format="wav", parameters=["-acodec", TARGET_BIT_DEPTH])
     
     
 
