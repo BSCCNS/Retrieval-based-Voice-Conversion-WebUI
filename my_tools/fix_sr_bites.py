@@ -33,7 +33,7 @@ except:
 for file in files[0:3]:
 
     print(file)
-    target = file.split(root, '/')[-1] #.replace('.wav', '_48k.wav')
+    target = file.split(root)[-1] #.replace('.wav', '_48k.wav')
     output_file = f'{out_dir}/{target}'
 
     print(output_file)
