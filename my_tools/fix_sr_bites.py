@@ -30,9 +30,9 @@ try:
 except:
     pass
 
-for file in files[0:3]:
+for file in files:
 
-    #print(file)
+    print(file)
     target = file.split(root)[-1] #.replace('.wav', '_48k.wav')
     output_file = f'{out_dir}{target}'
 
