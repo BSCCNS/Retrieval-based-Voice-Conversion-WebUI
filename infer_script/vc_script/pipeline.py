@@ -449,8 +449,6 @@ class Pipeline(object):
         if audio_max > 1:
             max_int16 /= audio_max
 
-        # TA this is probably where we need to set the type to float to match
-        # the 32 bits output?
         audio_opt = (audio_opt * max_int16).astype(np.int16)
         del pitch, pitchf, sid
         if torch.cuda.is_available():
