@@ -64,10 +64,6 @@ class VC:
         self.cpt = torch.load(person, map_location="cpu")
         self.tgt_sr = self.cpt["config"][-1]
 
-        # TA change
-        logging.info('----------- self.tgt_sr')
-        logging.info(self.tgt_sr)
-
         self.cpt["config"][-3] = self.cpt["weight"]["emb_g.weight"].shape[0]  # n_spk
         self.if_f0 = self.cpt.get("f0", 1)
         self.version = self.cpt.get("version", "v1")
@@ -161,6 +157,8 @@ class VC:
             )
 
             tgt_sr = resample_sr if self.tgt_sr != resample_sr >= 16000 else self.tgt_sr
+
+            logging.info(f'resample_sr : {resample_sr}')
 
             return tgt_sr, audio_opt, times, None
 
