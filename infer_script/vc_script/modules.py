@@ -133,7 +133,7 @@ class VC:
             if self.hubert_model is None:
                 self.hubert_model = load_hubert(self.config, hubert_path)
 
-            logger.info(f'self.tgt_sr : {self.tgt_sr}; resample_sr {resample_sr}; rms_mix_rate {rms_mix_rate}')
+            #logger.info(f'self.tgt_sr : {self.tgt_sr}; resample_sr {resample_sr}; rms_mix_rate {rms_mix_rate}')
 
             audio_opt = self.pipeline.pipeline(
                 self.hubert_model,
@@ -158,7 +158,7 @@ class VC:
 
             tgt_sr = resample_sr if self.tgt_sr != resample_sr >= 16000 else self.tgt_sr
 
-            logging.info(f'resample_sr : {resample_sr}; tgt_sr : {tgt_sr}')
+            #logging.info(f'resample_sr : {resample_sr}; tgt_sr : {tgt_sr}')
 
             return tgt_sr, audio_opt, times, None
 
