@@ -3,8 +3,18 @@ import os
 import pandas as pd
 from pydub import AudioSegment
 import wave
+import argparse
 
-root = '.'#'/Users/tomasandrade/Documents/BSC/ICHOIR/organos/flat'
+parser = argparse.ArgumentParser(
+                    prog='Conversion Pipeline',
+                    description='Runs conversion pipeline for RVC',
+                    epilog='Ask me for help')
+parser.add_argument('root') 
+
+args = parser.parse_args()
+root = open(args.root)
+
+#root = '.'#'/Users/tomasandrade/Documents/BSC/ICHOIR/organos/flat'
 
 files = glob.glob(f'{root}/*.wav', recursive=False)
 
