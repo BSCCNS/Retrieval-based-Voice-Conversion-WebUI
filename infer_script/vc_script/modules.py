@@ -63,6 +63,11 @@ class VC:
 
         self.cpt = torch.load(person, map_location="cpu")
         self.tgt_sr = self.cpt["config"][-1]
+
+        # TA change
+        logging.info('----------- self.tgt_sr')
+        logging.info(self.tgt_sr)
+
         self.cpt["config"][-3] = self.cpt["weight"]["emb_g.weight"].shape[0]  # n_spk
         self.if_f0 = self.cpt.get("f0", 1)
         self.version = self.cpt.get("version", "v1")
