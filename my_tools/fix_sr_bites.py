@@ -12,7 +12,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('root') 
 
 args = parser.parse_args()
-root = open(args.root)
+root = args.root
 
 #root = '.'#'/Users/tomasandrade/Documents/BSC/ICHOIR/organos/flat'
 
