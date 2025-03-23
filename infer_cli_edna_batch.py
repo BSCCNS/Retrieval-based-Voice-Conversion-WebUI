@@ -46,6 +46,7 @@ f0_method = rvc_dict["f0_method"]
 protect = rvc_dict["protect"]
 f0_up_key = rvc_dict["f0_up_key"]
 rms_mix_rate = rvc_dict["rms_mix_rate"]
+resample_sr = rvc_dict["resample_sr"]
 
 # output parameters
 #experiment_name = f'{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}_loop'
@@ -71,7 +72,8 @@ for input_path in files:
                                                     f0_method = f0_method,
                                                     f0_up_key = f0_up_key,
                                                     protect = protect,
-                                                    rms_mix_rate = rms_mix_rate)
+                                                    rms_mix_rate = rms_mix_rate,
+                                                    resample_sr = resample_sr)
     
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
