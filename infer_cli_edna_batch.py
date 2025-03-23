@@ -60,10 +60,10 @@ with open(f"{experiment_dir}/metadata.json", "w") as outfile:
 vc = VC()
 vc.get_vc(model_path, index_file = index_path)
 
-for file in files:
-    print(f'--------------- file {file}')
+for input_path in files:
+    print(f'--------------- file {input_path}')
 
-    out_wav_name = file.split('/')[-1].split('.wav')[-2]
+    out_wav_name = input_path.split('/')[-1].split('.wav')[-2]
     output_path = f'{experiment_dir}/{out_wav_name}_2nd_generation.wav'
     
     tgt_sr, audio_opt, times, _ = vc.vc_inference(1, input_path, #Path(input_audio),
