@@ -132,6 +132,8 @@ class VC:
             if self.hubert_model is None:
                 self.hubert_model = load_hubert(self.config, hubert_path)
 
+            logger.info(f'self.tgt_sr : {self.tgt_sr}; resample_sr {resample_sr}; rms_mix_rate {rms_mix_rate}')
+
             audio_opt = self.pipeline.pipeline(
                 self.hubert_model,
                 self.net_g,
