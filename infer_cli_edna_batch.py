@@ -46,7 +46,7 @@ f0_method = rvc_dict["f0_method"]
 protect = rvc_dict["protect"]
 f0_up_key = rvc_dict["f0_up_key"]
 rms_mix_rate = rvc_dict["rms_mix_rate"]
-resample_sr = rvc_dict["resample_sr"]
+resample_sr = rvc_dict.get("resample_sr", 0)
 
 # output parameters
 #experiment_name = f'{wav_name}_by_{model_name}_f0_method_{f0_method}_protect_{protect}_f0_up_key_{f0_up_key}_loop'
