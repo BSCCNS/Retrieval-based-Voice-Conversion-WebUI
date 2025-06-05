@@ -9,6 +9,7 @@ from scipy.io import wavfile
 
 from my_tools.combine_left_right import merge_LR_channels
 from my_tools.reshape_folder_structure import flatten_files
+from my_tools.split_left_right import split_LR
 
 from infer_script.vc_script.modules import VC
 
@@ -61,10 +62,21 @@ os.mkdir(experiment_dir)
 with open(f"{experiment_dir}/metadata.json", "w") as outfile: 
     json.dump(rvc_dict, outfile)
 
+
+###############################################################
+# split LR channels
+output_folder_LR = split_LR(input_folder)
+files_LR = glob.glob(f'{input_folder}/*.wav')
+###############################################################
+
+
+###############################################################
+# conversion
+
 vc = VC()
 vc.get_vc(model_path, index_file = index_path)
 
-for input_path in files:
+for input_path in files_LR:
     print(f'--------------- file {input_path}')
 
     out_wav_name = input_path.split('/')[-1].split('.wav')[-2]
@@ -81,6 +93,6 @@ for input_path in files:
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
 
-out_folder = merge_LR_channels(experiment_dir)
+out_folder_merge = merge_LR_channels(experiment_dir)
 
-_ = flatten_files(out_folder)
+_ = flatten_files(out_folder_merge)
