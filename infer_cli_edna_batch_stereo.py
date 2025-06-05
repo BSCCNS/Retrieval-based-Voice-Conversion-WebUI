@@ -66,7 +66,7 @@ with open(f"{experiment_dir}/metadata.json", "w") as outfile:
 ###############################################################
 # split LR channels
 output_folder_LR = split_LR(input_folder)
-files_LR = glob.glob(f'{input_folder}/*.wav')
+files_LR = glob.glob(f'{output_folder_LR}/*.wav')
 ###############################################################
 
 
