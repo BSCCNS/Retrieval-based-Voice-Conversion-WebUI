@@ -33,6 +33,7 @@ def flatten_files(input_folder, output_folder = None):
             # Create destination directories if needed
             os.makedirs(os.path.dirname(dst_path), exist_ok=True)
 
+            print(f'-------------- Writing file from {src_path} to {dst_path}')
             # Move or copy file (use shutil.move to move instead of copy)
             shutil.copy2(src_path, dst_path)
 
