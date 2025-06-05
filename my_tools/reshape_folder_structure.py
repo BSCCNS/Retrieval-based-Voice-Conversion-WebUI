@@ -1,5 +1,6 @@
 import os
 import shutil
+import glob
 
 # Folder containing flattened files
 #input_folder = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI/audio_rvc_output/AMA_INPUT_SMALL_by_violeta_dataset_3albums_titan_40_batch_stereo'
@@ -39,3 +40,40 @@ def to_subfolders(input_folder, output_folder = None):
 
     print("Flattened files restored to original folder structure.")
     return output_folder
+
+
+def flatten_folder(source_folder, output_folder = None):
+
+    if output_folder is None:
+        output_folder = f'{source_folder}_flat'
+
+    # Create the output directory if it doesn't exist
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Get all .wav files recursively
+    wav_files = glob.glob(os.path.join(source_folder, '**', '*.wav'), recursive=True)
+
+    for file_path in wav_files:
+        # Get relative path to source folder
+        rel_path = os.path.relpath(file_path, start=source_folder)
+
+        # Replace path separators with double underscores
+        flat_filename = rel_path.replace(os.sep, '__')
+
+        # Full destination path
+        dest_path = os.path.join(output_folder, flat_filename)
+
+        # Copy file to flattened structure
+        shutil.copy2(file_path, dest_path)
+
+    print("Files flattened and copied successfully using '__' as separator.")
+
+if __name__ == '__main__':
+    import sys
+    arguments = sys.argv[1:]
+
+    source_folder = arguments[0]
+    output_folder = arguments[1]
+
+    flatten_folder(source_folder, output_folder = output_folder)
+
