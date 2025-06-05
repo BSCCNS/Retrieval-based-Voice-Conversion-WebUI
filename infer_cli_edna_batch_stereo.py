@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from scipy.io import wavfile
 
 from my_tools.combine_left_right import merge_LR_channels
+from my_tools.reshape_folder_structure import flatten_files
 
 from infer_script.vc_script.modules import VC
 
@@ -80,4 +81,6 @@ for input_path in files:
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
 
-#merge_LR_channels()
+out_folder = merge_LR_channels(experiment_dir)
+
+_ = flatten_files(out_folder)

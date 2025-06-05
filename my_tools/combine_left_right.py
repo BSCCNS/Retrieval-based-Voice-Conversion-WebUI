@@ -6,7 +6,10 @@ import numpy as np
 #input_folder = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI/audio_rvc_output/AMA_INPUT_SMALL_by_violeta_dataset_3albums_titan_40_batch'
 #output_folder = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI/audio_rvc_output/AMA_INPUT_SMALL_by_violeta_dataset_3albums_titan_40_batch_stereo'
 
-def merge_LR_channels(input_folder, output_folder):
+def merge_LR_channels(input_folder, output_folder = None):
+
+    if output_folder is None:
+        output_folder = f'{input_folder}_stereo'
 
     # Ensure output folder exists
     os.makedirs(output_folder, exist_ok=True)
@@ -49,3 +52,4 @@ def merge_LR_channels(input_folder, output_folder):
             sf.write(output_path, stereo_data, sr_left, format='WAV', subtype='PCM_24')
 
     print("Stereo files created successfully with PCM_24 encoding.")
+    return output_folder
