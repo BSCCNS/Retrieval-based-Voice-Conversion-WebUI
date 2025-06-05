@@ -54,6 +54,7 @@ def merge_LR_channels(input_folder, output_folder = None):
             output_path = os.path.join(output_folder, base_name + 'stereo.wav')
 
             # Write stereo file with forced 24-bit PCM encoding
+            print(f'-------------- Writing file {output_path}')
             sf.write(output_path, stereo_data, sr_left, format='WAV', subtype='PCM_24')
 
     print("Stereo files created successfully with PCM_24 encoding.")
