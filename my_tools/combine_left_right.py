@@ -11,11 +11,16 @@ def merge_LR_channels(input_folder, output_folder = None):
     if output_folder is None:
         output_folder = f'{input_folder}_stereo'
 
+    print('merge LR')
+    print(f'Input folder: {input_folder}')
+    print(f'Output folder: {output_folder}')
+
     # Ensure output folder exists
     os.makedirs(output_folder, exist_ok=True)
 
     # Loop through matching L-channel files
     for filename in os.listdir(input_folder):
+        print(f'------ working on {filename}')
         if filename.endswith('L_2nd_generation.wav'):
             base_name = filename[:-len('L_2nd_generation.wav')]
 

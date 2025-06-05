@@ -11,11 +11,16 @@ def flatten_files(input_folder, output_folder = None):
     if output_folder is None:
         output_folder = f'{input_folder}_struct'
 
+    print('FLATTEN')
+    print(f'Input folder: {input_folder}')
+    print(f'Output folder: {output_folder}')
+
     # Create output root if needed
     os.makedirs(output_folder, exist_ok=True)
 
     # Loop through all files in the flat folder
     for filename in os.listdir(input_folder):
+        print(f'------ working on {filename}')
         # Only process files with double underscore separator
         if '__' in filename:
             # Reconstruct relative path
