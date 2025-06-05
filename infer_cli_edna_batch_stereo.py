@@ -3,6 +3,7 @@ import os
 import json
 import argparse
 import glob
+import time
 
 from dotenv import load_dotenv
 from scipy.io import wavfile
@@ -93,6 +94,8 @@ for input_path in files_LR:
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
 
+time.sleep(1.)
 out_folder_merge = merge_LR_channels(experiment_dir)
 
+time.sleep(1.)
 _ = flatten_files(out_folder_merge)
