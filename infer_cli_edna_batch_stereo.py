@@ -7,6 +7,8 @@ import glob
 from dotenv import load_dotenv
 from scipy.io import wavfile
 
+from my_tools.combine_left_right import merge_LR_channels
+
 from infer_script.vc_script.modules import VC
 
 load_dotenv()
@@ -78,4 +80,4 @@ for input_path in files:
     print(f'--------------- Saving audio to {output_path}')
     wavfile.write(output_path, tgt_sr, audio_opt)
 
-
+#merge_LR_channels()
