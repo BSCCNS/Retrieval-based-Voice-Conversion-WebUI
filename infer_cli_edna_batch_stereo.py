@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from scipy.io import wavfile
 
 from my_tools.combine_left_right import merge_LR_channels
-from my_tools.reshape_folder_structure import flatten_files
+from my_tools.reshape_folder_structure import to_subfolders
 from my_tools.split_left_right import split_LR
 
 from infer_script.vc_script.modules import VC
@@ -98,4 +98,4 @@ time.sleep(1.)
 out_folder_merge = merge_LR_channels(experiment_dir)
 
 time.sleep(1.)
-_ = flatten_files(out_folder_merge)
+_ = to_subfolders(out_folder_merge)

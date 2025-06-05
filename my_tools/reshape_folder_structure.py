@@ -6,7 +6,7 @@ import shutil
 # Folder to restore subfolder structure
 #output_folder = '/media/HDD_disk/tomas/ICHOIR/fork/Retrieval-based-Voice-Conversion-WebUI/audio_rvc_output/AMA_INPUT_SMALL_by_violeta_dataset_3albums_titan_40_batch_stereo_struct'
 
-def flatten_files(input_folder, output_folder = None):
+def to_subfolders(input_folder, output_folder = None):
 
     if output_folder is None:
         output_folder = f'{input_folder}_struct'
