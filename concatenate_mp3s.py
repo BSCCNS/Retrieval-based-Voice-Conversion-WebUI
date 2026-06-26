@@ -13,6 +13,7 @@ Usage:
 import argparse
 import os
 import glob
+from typing import List
 import numpy as np
 from pydub import AudioSegment
 
@@ -32,7 +33,7 @@ def load_and_normalize(path: str) -> AudioSegment:
     return audio
 
 
-def concatenate_with_crossfade(segments: list[AudioSegment], crossfade_ms: int) -> AudioSegment:
+def concatenate_with_crossfade(segments: List[AudioSegment], crossfade_ms: int) -> AudioSegment:
     """
     Join a list of AudioSegments with a smooth fade-out / fade-in at every join.
 
@@ -52,7 +53,7 @@ def concatenate_with_crossfade(segments: list[AudioSegment], crossfade_ms: int) 
     return result
 
 
-def process_group(mp3_paths: list[str], output_path: str) -> None:
+def process_group(mp3_paths: List[str], output_path: str) -> None:
     """Load, concatenate with crossfade, and export one group."""
     segments = []
     for p in mp3_paths:
